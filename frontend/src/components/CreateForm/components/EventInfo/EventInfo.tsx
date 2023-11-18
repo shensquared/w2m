@@ -1,44 +1,44 @@
-import { Trans } from "react-i18next/TransWithoutContext";
+import { Trans } from "react-i18next/TransWithoutContext"
 
-import Copyable from "/src/components/Copyable/Copyable";
-import { EventResponse } from "/src/config/api";
-import { useTranslation } from "/src/i18n/client";
+import Copyable from "/src/components/Copyable/Copyable"
+import { EventResponse } from "/src/config/api"
+import { useTranslation } from "/src/i18n/client"
 
-import styles from "./EventInfo.module.scss";
+import styles from "./EventInfo.module.scss"
 
 interface EventInfoProps {
     event: EventResponse;
 }
 
 const EventInfo = ({ event }: EventInfoProps) => {
-    const { t, i18n } = useTranslation("event");
+  const { t, i18n } = useTranslation("event")
 
-    return (
-        <div className={styles.wrapper}>
-            <h2>{event.name}</h2>
-            <Copyable className={styles.info}>
-                {`https://w2m.shenshen.mit.edu/${event.id}`}
-            </Copyable>
-            <p className={styles.info}>
-                <Trans i18nKey="event:nav.shareinfo_alt" t={t} i18n={i18n}>
+  return (
+    <div className={styles.wrapper}>
+      <h2>{event.name}</h2>
+      <Copyable className={styles.info}>
+        {`https://w2m.shenshen.mit.edu/${event.id}`}
+      </Copyable>
+      <p className={styles.info}>
+        <Trans i18nKey="event:nav.shareinfo_alt" t={t} i18n={i18n}>
                     _
-                    <a
-                        href={`mailto:?subject=${encodeURIComponent(
-                            t("nav.email_subject", { event_name: event.name })
-                        )}&body=${encodeURIComponent(
-                            `${t(
-                                "nav.email_body"
-                            )} https://w2m.shenshen.mit.edu/${event.id}`
-                        )}`}
-                        target="_blank"
-                    >
+          <a
+            href={`mailto:?subject=${encodeURIComponent(
+              t("nav.email_subject", { event_name: event.name })
+            )}&body=${encodeURIComponent(
+              `${t(
+                "nav.email_body"
+              )} https://w2m.shenshen.mit.edu/${event.id}`
+            )}`}
+            target="_blank"
+          >
                         _
-                    </a>
+          </a>
                     _
-                </Trans>
-            </p>
-        </div>
-    );
-};
+        </Trans>
+      </p>
+    </div>
+  )
+}
 
-export default EventInfo;
+export default EventInfo

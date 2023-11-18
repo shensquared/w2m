@@ -1,30 +1,30 @@
-import { Metadata } from "next";
+import { Metadata } from "next"
 
-import Content from "/src/components/Content/Content";
-import CreateForm from "/src/components/CreateForm/CreateForm";
-import Header from "/src/components/Header/Header";
+import Content from "/src/components/Content/Content"
+import CreateForm from "/src/components/CreateForm/CreateForm"
+import Header from "/src/components/Header/Header"
 
-import Redirect from "./Redirect";
+import Redirect from "./Redirect"
 
 export const metadata: Metadata = {
-    title: "Create a W2M",
-};
+  title: "Create a W2M",
+}
 
 /**
  * Used in the Crab Fit browser extension, to be rendered only in an iframe
  */
 const Page = async () => (
-    <>
-        <Content isSlim>
-            <Header isFull isSmall />
-        </Content>
+  <>
+    <Content isSlim>
+      <Header isFull isSmall />
+    </Content>
 
-        <Content isSlim>
-            <CreateForm noRedirect />
-        </Content>
+    <Content isSlim>
+      <CreateForm noRedirect />
+    </Content>
 
-        <Redirect />
-    </>
-);
+    <Redirect />
+  </>
+)
 
-export default Page;
+export default Page
