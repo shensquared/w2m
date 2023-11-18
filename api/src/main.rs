@@ -99,7 +99,7 @@ async fn main() {
         .layer(rate_limit)
         .layer(TraceLayer::new_for_http());
 
-    let addr = SocketAddr::from(([0, 0, 0, 0], 3000));
+    let addr = SocketAddr::from(([0, 0, 0, 0], 3034));
 
     println!(
         "🦀 Crab Fit API listening at http://{} in {} mode",
