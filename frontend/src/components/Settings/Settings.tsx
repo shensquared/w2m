@@ -99,7 +99,7 @@ const Settings = () => {
               'Light': t('options.theme.options.Light'),
               'Dark': t('options.theme.options.Dark'),
             }}
-            value={store.theme ?? 'System'}
+            value={store.theme ?? 'Light'}
             onChange={value => store.setTheme(value)}
           />
 
