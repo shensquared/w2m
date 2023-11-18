@@ -15,4 +15,4 @@ Allow: /*.ico$
 Allow: /*.svg$
 Disallow: *
 
-Sitemap: https://crab.fit/sitemap.xml
+Sitemap: https://w2m.shenshen.mit.edu/sitemap.xml
