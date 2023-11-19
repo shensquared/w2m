@@ -89,47 +89,6 @@ const EventAvailabilities = ({ event }: EventAvailabilitiesProps) => {
           setTab(u ? 'you' : 'group')
         }} />
 
-        <SelectField
-          label={t('form.timezone')}
-          name="timezone"
-          id="timezone"
-          isSmall
-          value={timezone}
-          onChange={event => setTimezone(event.currentTarget.value)}
-          options={timezones}
-        />
-
-        {event?.timezone && event.timezone !== timezone && <p>
-          <Trans i18nKey="form.created_in_timezone" t={t} i18n={i18n}>
-            {/* eslint-disable-next-line */}
-            {/* @ts-ignore */}
-            _<strong>{{timezone: event.timezone}}</strong>
-            _<a href="#" onClick={e => {
-              e.preventDefault()
-              setTimezone(event.timezone)
-            }}>_</a>_
-          </Trans>
-        </p>}
-
-        {((
-          Intl.DateTimeFormat().resolvedOptions().timeZone !== timezone
-          && (event?.timezone && event.timezone !== Intl.DateTimeFormat().resolvedOptions().timeZone)
-        ) || (
-          event?.timezone === undefined
-          && Intl.DateTimeFormat().resolvedOptions().timeZone !== timezone
-        )) && (
-          <p>
-            <Trans i18nKey="form.local_timezone" t={t} i18n={i18n}>
-              {/* eslint-disable-next-line */}
-              {/* @ts-ignore */}
-              _<strong>{{timezone: Intl.DateTimeFormat().resolvedOptions().timeZone}}</strong>
-              _<a href="#" onClick={e => {
-                e.preventDefault()
-                setTimezone(Intl.DateTimeFormat().resolvedOptions().timeZone)
-              }}>_</a>_
-            </Trans>
-          </p>
-        )}
       </Content>
     </Section>
 
@@ -192,6 +151,52 @@ const EventAvailabilities = ({ event }: EventAvailabilitiesProps) => {
       }}
       table={table}
     />}
+
+    <Content>
+      <SelectField
+        label={t('form.timezone')}
+        name="timezone"
+        id="timezone"
+        isInline
+        isHorizontal
+        value={timezone}
+        onChange={event => setTimezone(event.currentTarget.value)}
+        options={timezones}
+        style={{height: "70%", width:"35%", padding:'2px 4px'}}
+      />
+
+      {event?.timezone && event.timezone !== timezone && <p>
+        <Trans i18nKey="form.created_in_timezone" t={t} i18n={i18n}>
+          {/* eslint-disable-next-line */}
+            {/* @ts-ignore */}
+            _<strong>{{timezone: event.timezone}}</strong>
+            _<a href="#" onClick={e => {
+            e.preventDefault()
+            setTimezone(event.timezone)
+          }}>_</a>_
+        </Trans>
+      </p>}
+
+      {((
+        Intl.DateTimeFormat().resolvedOptions().timeZone !== timezone
+          && (event?.timezone && event.timezone !== Intl.DateTimeFormat().resolvedOptions().timeZone)
+      ) || (
+        event?.timezone === undefined
+          && Intl.DateTimeFormat().resolvedOptions().timeZone !== timezone
+      )) && (
+        <p>
+          <Trans i18nKey="form.local_timezone" t={t} i18n={i18n}>
+            {/* eslint-disable-next-line */}
+              {/* @ts-ignore */}
+              _<strong>{{timezone: Intl.DateTimeFormat().resolvedOptions().timeZone}}</strong>
+              _<a href="#" onClick={e => {
+              e.preventDefault()
+              setTimezone(Intl.DateTimeFormat().resolvedOptions().timeZone)
+            }}>_</a>_
+          </Trans>
+        </p>
+      )}
+    </Content>
   </>
 }
 

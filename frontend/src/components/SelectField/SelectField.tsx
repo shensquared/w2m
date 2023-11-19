@@ -11,6 +11,7 @@ interface SelectFieldProps extends React.ComponentProps<'select'> {
   isInline?: boolean
   isSmall?: boolean
   defaultOption?: React.ReactNode
+  isHorizontal?:boolean
 }
 
 const SelectField = forwardRef<HTMLSelectElement, SelectFieldProps>(({
@@ -20,33 +21,57 @@ const SelectField = forwardRef<HTMLSelectElement, SelectFieldProps>(({
   isInline = false,
   isSmall = false,
   defaultOption,
+  isHorizontal = false,
   ...props
-}, ref) => <Wrapper style={isInline ? { margin: 0 } : (isSmall ? { marginBlock: '10px' } : undefined)}>
-  {label && <Label
-    htmlFor={props.name}
-    style={isInline ? { fontSize: '16px' } : (isSmall ? { fontSize: '.9rem' } : undefined)}
-  >{label}</Label>}
+}, ref) => 
+  isHorizontal ? <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '20px 0', flexWrap: 'wrap', gap: '10px' }}>
+    {label && <p>{label}</p>}
+    {description && <Description htmlFor={props.name}>{description}</Description>}
+    <select
+      className={styles.select}
+      id={props.name}
+      style={isSmall ? { padding: '6px 8px' } : undefined}
+      ref={ref}
+      {...props}
+    >
+      {defaultOption && <option value="">{defaultOption}</option>}
+      {Array.isArray(options) ? (
+        options.map(value =>
+          <option key={value} value={value}>{value}</option>
+        )
+      ) : (
+        Object.entries(options).map(([key, value]) =>
+          <option key={key} value={key}>{value}</option>
+        )
+      )}
+    </select>
+  </div>
+    : <Wrapper style={isInline ? { margin: 0 } : (isSmall ? { marginBlock: '10px' } : undefined)}>
+      {label && <Label
+        htmlFor={props.name}
+        style={isInline ? { fontSize: '16px' } : (isSmall ? { fontSize: '.9rem' } : undefined)}
+      >{label}</Label>}
 
-  {description && <Description htmlFor={props.name}>{description}</Description>}
+      {description && <Description htmlFor={props.name}>{description}</Description>}
 
-  <select
-    className={styles.select}
-    id={props.name}
-    style={isSmall ? { padding: '6px 8px' } : undefined}
-    ref={ref}
-    {...props}
-  >
-    {defaultOption && <option value="">{defaultOption}</option>}
-    {Array.isArray(options) ? (
-      options.map(value =>
-        <option key={value} value={value}>{value}</option>
-      )
-    ) : (
-      Object.entries(options).map(([key, value]) =>
-        <option key={key} value={key}>{value}</option>
-      )
-    )}
-  </select>
-</Wrapper>)
+      <select
+        className={styles.select}
+        id={props.name}
+        style={isSmall ? { padding: '6px 8px' } : undefined}
+        ref={ref}
+        {...props}
+      >
+        {defaultOption && <option value="">{defaultOption}</option>}
+        {Array.isArray(options) ? (
+          options.map(value =>
+            <option key={value} value={value}>{value}</option>
+          )
+        ) : (
+          Object.entries(options).map(([key, value]) =>
+            <option key={key} value={key}>{value}</option>
+          )
+        )}
+      </select>
+    </Wrapper>)
 
 export default SelectField
