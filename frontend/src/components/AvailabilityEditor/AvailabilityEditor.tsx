@@ -59,14 +59,9 @@ const AvailabilityEditor = ({ eventId, times, timezone, value = [], onChange, ta
   }, [selectAll, selectNone, selectInvert])
 
   return <>
-    {/* <Content isCentered>
+    <Content isCentered>
       <div>{t('you.info')}</div>
-      <div className={styles.selectionControls}>
-        <Button isSmall onClick={selectAll} title="Ctrl + A (⌘ A)">{t('you.select_all')}</Button>
-        <Button isSmall onClick={selectNone} title="Ctrl + Shift + A (⌘ ⇧ A)">{t('you.select_none')}</Button>
-        <Button isSmall onClick={selectInvert} title="Ctrl + I (⌘ I)">{t('you.select_invert')}</Button>
-      </div>
-    </Content> */}
+    </Content>
     {times[0]?.length === 13 && <Content>
       <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', gap: 12 }}>
         <GoogleCalendar
