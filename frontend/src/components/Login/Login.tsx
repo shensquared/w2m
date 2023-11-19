@@ -86,7 +86,7 @@ const Login = ({ eventId, user, onChange }: LoginProps) => {
       <TextField
         // label={t('form.password')}
         type="password"
-        placeholder="Password(optional)"
+        placeholder="Password (optional)"
         disabled={!eventId}
         isInline
         {...register('password')}

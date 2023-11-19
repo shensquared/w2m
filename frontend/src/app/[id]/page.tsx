@@ -61,29 +61,8 @@ const Page = async ({ params }: PageProps) => {
         }
       >
         <Content>
-          <h2 className={styles.name}>{event.name}</h2>
+          <h2 className={styles.name}>Event: {event.name}</h2>
 
-          <p className={makeClass(styles.info, styles.noPrint)}>
-
-            <Trans i18nKey="event:nav.shareinfo" t={t} i18n={i18n}>
-              -
-              <a
-                href={`mailto:?subject=${encodeURIComponent(
-                  t("event:nav.email_subject", {
-                    event_name: event.name,
-                  })
-                )}&body=${encodeURIComponent(
-                  `${t(
-                    "event:nav.email_body"
-                  )} https://w2m.shenshen.mit.edu/${event.id}`
-                )}`}
-              >
-                                _
-              </a>
-                            _
-            </Trans>
-            <Copyable>{`https://w2m.shenshen.mit.edu/${event.id}`}</Copyable>
-          </p>
         </Content>
       </Suspense>
 
@@ -102,6 +81,27 @@ const Page = async ({ params }: PageProps) => {
             i18n.language
           ),
         })}
+        <p className={makeClass(styles.info, styles.noPrint)}>
+
+          <Trans i18nKey="event:nav.shareinfo" t={t} i18n={i18n}>
+              -
+            <a
+              href={`mailto:?subject=${encodeURIComponent(
+                t("event:nav.email_subject", {
+                  event_name: event.name,
+                })
+              )}&body=${encodeURIComponent(
+                `${t(
+                  "event:nav.email_body"
+                )} https://w2m.shenshen.mit.edu/${event.id}`
+              )}`}
+            >
+                                _
+            </a>
+                            _
+          </Trans>
+          <Copyable>{`https://w2m.shenshen.mit.edu/${event.id}`}</Copyable>
+        </p>
       </span>
     </>
   )
