@@ -54,7 +54,7 @@
   },
 
   "you": {
-    "info": "Click and drag the calendar below to set your availabilities",
+    "info": "Click and drag to set your availabilities; selections auto saved.",
     "select_all": "Select all",
     "select_none": "Select none",
     "select_invert": "Invert selection",
