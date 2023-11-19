@@ -67,42 +67,29 @@ const Page = async ({ params }: PageProps) => {
       </Suspense>
 
       <EventAvailabilities event={event} />
-      <span
-        className={styles.date}
-        title={Temporal.Instant.fromEpochSeconds(
-          event.created_at
-        ).toLocaleString(i18n.language, { dateStyle: "long" })}
-      >
-        {t("common:created", {
-          date: relativeTimeFormat(
-            Temporal.Instant.fromEpochSeconds(
-              event.created_at
-            ),
-            i18n.language
-          ),
-        })}
-        <p className={makeClass(styles.info, styles.noPrint)}>
 
-          <Trans i18nKey="event:nav.shareinfo" t={t} i18n={i18n}>
+      <p className={makeClass(styles.info, styles.noPrint)}>
+
+        <Trans i18nKey="event:nav.shareinfo" t={t} i18n={i18n}>
               -
-            <a
-              href={`mailto:?subject=${encodeURIComponent(
-                t("event:nav.email_subject", {
-                  event_name: event.name,
-                })
-              )}&body=${encodeURIComponent(
-                `${t(
-                  "event:nav.email_body"
-                )} https://w2m.shenshen.mit.edu/${event.id}`
-              )}`}
-            >
+          <a
+            href={`mailto:?subject=${encodeURIComponent(
+              t("event:nav.email_subject", {
+                event_name: event.name,
+              })
+            )}&body=${encodeURIComponent(
+              `${t(
+                "event:nav.email_body"
+              )} https://w2m.shenshen.mit.edu/${event.id}`
+            )}`}
+          >
                                 _
-            </a>
+          </a>
                             _
-          </Trans>
-          <Copyable>{`https://w2m.shenshen.mit.edu/${event.id}`}</Copyable>
-        </p>
-      </span>
+        </Trans>
+        <Copyable>{`https://w2m.shenshen.mit.edu/${event.id}`}</Copyable>
+      </p>
+
     </>
   )
 }
