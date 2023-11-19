@@ -92,6 +92,7 @@ const EventAvailabilities = ({ event }: EventAvailabilitiesProps) => {
       </Content>
     </Section>
 
+    {user &&
     <Content>
       <div className={styles.tabs}>
         <button
@@ -119,7 +120,7 @@ const EventAvailabilities = ({ event }: EventAvailabilitiesProps) => {
           onClick={() => setTab('group')}
         >{t('tabs.group')}</button>
       </div>
-    </Content>
+    </Content>}
 
     {tab === 'group' ? <AvailabilityViewer
       times={expandedTimes}
