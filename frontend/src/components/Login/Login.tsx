@@ -71,22 +71,24 @@ const Login = ({ eventId, user, onChange }: LoginProps) => {
     <h2 style={{ margin: 0 }}>{t('form.signed_in', { name: user.name })}</h2>
     <Button isSmall onClick={() => onChange(undefined)}>{t('form.logout_button')}</Button>
   </div> : <>
-    <h2>{t('form.signed_out')}</h2>
+    <h3>{t('form.signed_out')}</h3>
     <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
       <TextField
-        label={t('form.name')}
+        // label={t('form.name')}
         type="text"
-        isInline
+        placeholder="Your name"
         required
+        isInline
         disabled={!eventId}
         {...register('username')}
       />
 
       <TextField
-        label={t('form.password')}
+        // label={t('form.password')}
         type="password"
-        isInline
+        placeholder="Password(optional)"
         disabled={!eventId}
+        isInline
         {...register('password')}
       />
 

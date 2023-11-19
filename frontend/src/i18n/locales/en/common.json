@@ -1,8 +1,8 @@
 {
     "name": "",
-    "tagline": "Create your own",
+    "tagline": "Create your own W2M event",
     "cta": "Create your own W2M",
-    "created": "Created {{date}}",
+    "created": "The event was created {{date}}",
     "donate": {
         "info": "",
         "button": "",

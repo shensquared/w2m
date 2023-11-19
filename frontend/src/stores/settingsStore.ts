@@ -24,7 +24,7 @@ const useSettingsStore = create<SettingsStore>()(persist(
   set => ({
     weekStart: 0,
     timeFormat: '12h',
-    theme: 'System',
+    theme: 'Light',
     highlight: false,
     colormap: 'crabfit',
 

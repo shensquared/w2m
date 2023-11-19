@@ -80,9 +80,9 @@ const Header = async ({ isFull, isSmall }: HeaderProps) => {
               alt=""
             />
           </div>
-          <span className={styles.tagline}>
+          {/* <span className={styles.tagline}>
             {t("common:tagline")}
-          </span>
+          </span> */}
         </Link>
       )}
     </header>

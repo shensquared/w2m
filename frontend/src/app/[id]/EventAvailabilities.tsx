@@ -93,7 +93,7 @@ const EventAvailabilities = ({ event }: EventAvailabilitiesProps) => {
           label={t('form.timezone')}
           name="timezone"
           id="timezone"
-          isInline
+          isSmall
           value={timezone}
           onChange={event => setTimezone(event.currentTarget.value)}
           options={timezones}
