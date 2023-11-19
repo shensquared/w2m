@@ -135,32 +135,7 @@ const AvailabilityViewer = ({ times, people, table }: AvailabilityViewerProps) =
 
       <span className={styles.info}>{t('group.info1')}</span>
 
-      {people.length > 1 && <>
-        <span className={styles.info}>{t('group.info2')}</span>
-        <div className={styles.people}>
-          {people.map(person =>
-            <button
-              type="button"
-              className={makeClass(
-                styles.person,
-                filteredPeople.includes(person.name) && styles.personSelected,
-              )}
-              key={person.name}
-              onClick={() => {
-                setTempFocus(undefined)
-                if (filteredPeople.includes(person.name)) {
-                  setFilteredPeople(filteredPeople.filter(n => n !== person.name))
-                } else {
-                  setFilteredPeople([...filteredPeople, person.name])
-                }
-              }}
-              onMouseOver={() => setTempFocus(person.name)}
-              onMouseOut={() => setTempFocus(undefined)}
-              title={relativeTimeFormat(Temporal.Instant.fromEpochSeconds(person.created_at), i18n.language)}
-            >{person.name}</button>
-          )}
-        </div>
-      </>}
+
     </Content>
 
     <div className={styles.wrapper}>
@@ -195,6 +170,32 @@ const AvailabilityViewer = ({ times, people, table }: AvailabilityViewerProps) =
         </div>}
       </div>
     </div>
+    {people.length > 1 && <>
+      <span className={styles.info}>{t('group.info2')}</span>
+      <div className={styles.people}>
+        {people.map(person =>
+          <button
+            type="button"
+            className={makeClass(
+              styles.person,
+              filteredPeople.includes(person.name) && styles.personSelected,
+            )}
+            key={person.name}
+            onClick={() => {
+              setTempFocus(undefined)
+              if (filteredPeople.includes(person.name)) {
+                setFilteredPeople(filteredPeople.filter(n => n !== person.name))
+              } else {
+                setFilteredPeople([...filteredPeople, person.name])
+              }
+            }}
+            onMouseOver={() => setTempFocus(person.name)}
+            onMouseOut={() => setTempFocus(undefined)}
+            title={relativeTimeFormat(Temporal.Instant.fromEpochSeconds(person.created_at), i18n.language)}
+          >{person.name}</button>
+        )}
+      </div>
+    </>}
   </>
 }
 
