@@ -40,7 +40,7 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: "favicon.ico",
-    apple: "logo192.png",
+    apple: "shen192.png",
   },
 }
 
