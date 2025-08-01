@@ -241,6 +241,7 @@ const EventAvailabilities = ({ event }: EventAvailabilitiesProps) => {
           value={timezone}
           onChange={event => setTimezone(event.currentTarget.value)}
           options={timezones}
+          style={{ width: '200px' }}
         />
 
               {event?.timezone && event.timezone !== timezone && <p>
