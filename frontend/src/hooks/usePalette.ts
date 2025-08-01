@@ -6,12 +6,13 @@ import { useStore } from '/src/stores'
 import useSettingsStore from '/src/stores/settingsStore'
 
 export const usePalette = (steps: number) => {
+  const safeSteps = Math.max(1, Math.floor(steps || 1))
   const colormap = useStore(useSettingsStore, state => state.colormap)
 
   return useMemo(() =>
     createPalette({
       map: (colormap === undefined || colormap === 'crabfit') ? [[0, [247, 158, 0, 0]], [1, [247, 158, 0, 255]]] : colormap,
-      steps,
+      steps: safeSteps,
     })
       .format('rgba')
       .map(([r, g, b, a]) => color(r, g, b, a / 255))
@@ -23,5 +24,5 @@ export const usePalette = (steps: number) => {
           highlight: highlight.hex('rgba'),
         }
       }),
-  [steps, colormap])
+  [safeSteps, colormap])
 }
