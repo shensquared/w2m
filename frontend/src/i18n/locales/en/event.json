@@ -2,6 +2,15 @@
   "available": "available",
   "greyed_times": "This area is greyed out because it's not part of the event. You may be looking at this event in a different timezone from where it was created.",
 
+  "availability": {
+    "level": "Availability Level",
+    "preferred": "Preferred",
+    "can_if_needed": "Can if needed",
+    "not_available": "Not available",
+    "instructions": "Instructions",
+    "click_to_cycle": "Click or drag to cycle through: Preferred → Can if needed → Not available"
+  },
+
   "nav": {
     "title": "Click to copy",
     "copied": "Copied!",
@@ -54,7 +63,7 @@
   },
 
   "you": {
-    "info": "Click and drag to set your availabilities; selections auto saved.",
+    "info": "Click or drag to cycle through availability levels; selections auto saved.",
     "select_all": "Select all",
     "select_none": "Select none",
     "select_invert": "Invert selection",
