@@ -1,10 +1,9 @@
 .heatmap {
   display: inline-flex;
   box-sizing: border-box;
-  min-width: 100%;
-  align-items: flex-end;
+  width: 100%;
+  align-items: flex-start;
   justify-content: center;
-  padding: 0 calc(calc(100% - 600px) / 2);
 
   @media (max-width: 660px) {
     padding: 0 30px;
@@ -17,18 +16,21 @@
   flex-direction: column;
   padding-right: 6px;
   position: sticky;
-  left: 6px;
+  left: 0;
   z-index: 5;
   overflow: hidden;
   padding-top: 1em;
   pointer-events: none;
+  background: var(--background);
 }
 
 .timeSpace {
   height: 10px;
   position: relative;
-  border-top: 2px solid transparent;
   text-align: right;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 
   &.grey {
     background-origin: border-box;
@@ -94,10 +96,6 @@
     border-top-right-radius: 3px;
     border-bottom-right-radius: 3px;
   }
-
-  & .time + .timespace, & .timespace:first-of-type {
-    border-top: 2px solid var(--text);
-  }
 }
 
 .time {
@@ -105,6 +103,8 @@
   background-origin: border-box;
   transition: background-color .1s;
   position: relative;
+  display: flex;
+  align-items: center;
 
   border-top-width: 2px;
   border-top-style: solid;
@@ -184,11 +184,15 @@
 
 .wrapper {
   overflow-y: visible;
-  margin: 20px 0;
+  margin: 20px 0 40px 0;
   position: relative;
+  display: flex;
+  justify-content: center;
 
   & > div {
     overflow-x: auto;
+    width: 100%;
+    max-width: 600px;
   }
 }
 
@@ -198,42 +202,34 @@
 }
 
 .tooltip {
-  position: absolute;
-  border: 1px solid var(--text);
-  border-radius: 3px;
-  padding: 4px 8px;
-  background-color: var(--background);
-  max-width: 200px;
-  pointer-events: none;
-  z-index: 100;
-  user-select: none;
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  max-width: 300px;
+}
 
-  h3 {
-    font-size: 15px;
-    margin: 0;
-    font-weight: 700;
-  }
-  & > span {
-    font-size: 13px;
-    display: block;
-    opacity: .8;
-    font-weight: 600;
-  }
-  & > div {
-    font-size: 13px;
-    padding: 4px 0;
+.tooltipDate {
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: var(--text);
+}
 
-    span {
-      display: inline-block;
-      margin: 2px;
-      padding: 1px 4px;
-      border: 1px solid var(--primary);
-      border-radius: 3px;
+.tooltipAvailable {
+  margin-bottom: 4px;
+  color: var(--text);
+}
 
-      &[data-disabled=true] {
-        opacity: .5;
-        border-color: var(--text);
-      }
-    }
-  }
+.tooltipPreferred {
+  color: #22c55e;
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+
+.tooltipCanIfNeeded {
+  color: #eab308;
+  font-weight: 500;
 }

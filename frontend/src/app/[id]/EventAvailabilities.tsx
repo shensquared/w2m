@@ -75,10 +75,12 @@ const EventAvailabilities = ({ event }: EventAvailabilitiesProps) => {
   useEffect(() => {
     if (tab === 'group' && event) {
       getPeople(event.id)
-        .then(setPeople)
+        .then(people => {
+          setPeople(people)
+        })
         .catch(console.warn)
     }
-  }, [tab])
+  }, [tab, event])
 
   return <>
     <Section id="login">
@@ -97,6 +99,7 @@ const EventAvailabilities = ({ event }: EventAvailabilitiesProps) => {
       <div className={styles.tabs}>
         <button
           className={makeClass(
+            styles.tab,
             styles.tab,
             tab === 'you' && styles.tabSelected,
             !user && styles.tabDisabled,
@@ -122,7 +125,7 @@ const EventAvailabilities = ({ event }: EventAvailabilitiesProps) => {
       </div>
     </Content>}
 
-    {tab === 'group' ? <AvailabilityViewer
+            {tab === 'group' ? <AvailabilityViewer
       times={expandedTimes}
       people={people}
       table={table}
@@ -154,49 +157,50 @@ const EventAvailabilities = ({ event }: EventAvailabilitiesProps) => {
     />}
 
     <Content>
-      <SelectField
-        label={t('form.timezone')}
-        name="timezone"
-        id="timezone"
-        isInline
-        isHorizontal
-        value={timezone}
-        onChange={event => setTimezone(event.currentTarget.value)}
-        options={timezones}
-        style={{height: "70%", width:"35%", padding:'2px 4px'}}
-      />
+      <div style={{ marginTop: 0 }}>
+        <SelectField
+          label={t('form.timezone')}
+          name="timezone"
+          id="timezone"
+          isInline
+          isHorizontal
+          value={timezone}
+          onChange={event => setTimezone(event.currentTarget.value)}
+          options={timezones}
+        />
 
-      {event?.timezone && event.timezone !== timezone && <p>
-        <Trans i18nKey="form.created_in_timezone" t={t} i18n={i18n}>
-          {/* eslint-disable-next-line */}
-            {/* @ts-ignore */}
-            _<strong>{{timezone: event.timezone}}</strong>
-            _<a href="#" onClick={e => {
-            e.preventDefault()
-            setTimezone(event.timezone)
-          }}>_</a>_
-        </Trans>
-      </p>}
-
-      {((
-        Intl.DateTimeFormat().resolvedOptions().timeZone !== timezone
-          && (event?.timezone && event.timezone !== Intl.DateTimeFormat().resolvedOptions().timeZone)
-      ) || (
-        event?.timezone === undefined
-          && Intl.DateTimeFormat().resolvedOptions().timeZone !== timezone
-      )) && (
-        <p>
-          <Trans i18nKey="form.local_timezone" t={t} i18n={i18n}>
+              {event?.timezone && event.timezone !== timezone && <p>
+          <Trans i18nKey="form.created_in_timezone" t={t} i18n={i18n}>
             {/* eslint-disable-next-line */}
               {/* @ts-ignore */}
-              _<strong>{{timezone: Intl.DateTimeFormat().resolvedOptions().timeZone}}</strong>
+              _<strong>{{timezone: event.timezone}}</strong>
               _<a href="#" onClick={e => {
               e.preventDefault()
-              setTimezone(Intl.DateTimeFormat().resolvedOptions().timeZone)
+              setTimezone(event.timezone)
             }}>_</a>_
           </Trans>
-        </p>
-      )}
+        </p>}
+
+        {((
+          Intl.DateTimeFormat().resolvedOptions().timeZone !== timezone
+            && (event?.timezone && event.timezone !== Intl.DateTimeFormat().resolvedOptions().timeZone)
+        ) || (
+          event?.timezone === undefined
+            && Intl.DateTimeFormat().resolvedOptions().timeZone !== timezone
+        )) && (
+          <p>
+            <Trans i18nKey="form.local_timezone" t={t} i18n={i18n}>
+              {/* eslint-disable-next-line */}
+                {/* @ts-ignore */}
+                _<strong>{{timezone: Intl.DateTimeFormat().resolvedOptions().timeZone}}</strong>
+                _<a href="#" onClick={e => {
+                e.preventDefault()
+                setTimezone(Intl.DateTimeFormat().resolvedOptions().timeZone)
+              }}>_</a>_
+            </Trans>
+          </p>
+        )}
+      </div>
     </Content>
   </>
 }
