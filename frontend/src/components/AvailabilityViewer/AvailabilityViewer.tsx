@@ -24,14 +24,14 @@ interface AvailabilityViewerProps {
     }>
   }>
   table?: ReturnType<typeof calculateTable>
+  tempFocus?: string
 }
 
-const AvailabilityViewer = ({ times, people, table }: AvailabilityViewerProps) => {
+const AvailabilityViewer = ({ times, people, table, tempFocus: propTempFocus }: AvailabilityViewerProps) => {
   const { t, i18n } = useTranslation('event')
 
   const highlight = useStore(useSettingsStore, state => state.highlight)
-  const [filteredPeople, setFilteredPeople] = useState(people.map(p => p.name))
-  const [tempFocus, setTempFocus] = useState<string>()
+  const tempFocus = propTempFocus
   const [focusCount, setFocusCount] = useState<number>()
 
   const [tooltip, setTooltip] = useState<{
@@ -49,8 +49,8 @@ const AvailabilityViewer = ({ times, people, table }: AvailabilityViewerProps) =
 
   // Calculate availabilities
   const { availabilities, min, max } = useMemo(() =>
-    calculateAvailability(times, people.filter(p => filteredPeople.includes(p.name))),
-  [times, filteredPeople, people])
+    calculateAvailability(times, people),
+  [times, people])
 
   // Calculate actual scores that exist in the data
   const actualScores = useMemo(() => {
@@ -70,10 +70,7 @@ const AvailabilityViewer = ({ times, people, table }: AvailabilityViewerProps) =
   // Create a palette based on the actual scores that exist
   const palette = usePalette(actualScores?.length || 1)
 
-  // Reselect everyone if the amount of people changes
-  useEffect(() => {
-    setFilteredPeople(people.map(p => p.name))
-  }, [people.length])
+
 
   const heatmap = useMemo(() => table?.columns.map((column, x) => <Fragment key={x}>
     {column ? <div className={styles.dateColumn}>
@@ -157,7 +154,7 @@ const AvailabilityViewer = ({ times, people, table }: AvailabilityViewerProps) =
               const canIfNeededText = hasCanIfNeeded ? ` (${canIfNeededHere.length} can if needed)` : ''
               setTooltip({
                 anchor: e.currentTarget,
-                available: `${peopleHere.length} / ${filteredPeople.length} ${t('available')}${preferredText}${canIfNeededText}`,
+                available: `${peopleHere.length} / ${people.length} ${t('available')}${preferredText}${canIfNeededText}`,
                 date: cell.label,
                 people: peopleHere,
                 preferred: preferredHere,
@@ -183,7 +180,6 @@ const AvailabilityViewer = ({ times, people, table }: AvailabilityViewerProps) =
     palette,
     tempFocus,
     focusCount,
-    filteredPeople,
   ])
 
   return <>
@@ -193,7 +189,7 @@ const AvailabilityViewer = ({ times, people, table }: AvailabilityViewerProps) =
         max={actualScores?.[actualScores?.length - 1] ?? 0}
         palette={palette}
         actualScores={actualScores}
-        total={filteredPeople.length}
+        total={people.length}
         onSegmentFocus={setFocusCount}
       />
     </Content>
@@ -235,32 +231,7 @@ const AvailabilityViewer = ({ times, people, table }: AvailabilityViewerProps) =
       )}
     </div>}
 
-  {people.length > 1 && <>
-    <span className={styles.info}>{t('group.info2')}</span>
-    <div className={styles.people}>
-      {people.map(person =>
-        <button
-          type="button"
-          className={makeClass(
-            styles.person,
-            filteredPeople.includes(person.name) && styles.personSelected,
-          )}
-          key={person.name}
-          onClick={() => {
-            setTempFocus(undefined)
-            if (filteredPeople.includes(person.name)) {
-              setFilteredPeople(filteredPeople.filter(n => n !== person.name))
-            } else {
-              setFilteredPeople([...filteredPeople, person.name])
-            }
-          }}
-          onMouseOver={() => setTempFocus(person.name)}
-          onMouseOut={() => setTempFocus(undefined)}
-          title={person.name}
-        >{person.name}</button>
-      )}
-    </div>
-  </>}
+
   </>
 }
 

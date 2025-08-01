@@ -19,6 +19,7 @@ import useSettingsStore from '/src/stores/settingsStore'
 import { calculateTable, expandTimes, makeClass, calculateAvailability } from '/src/utils'
 import { usePalette } from '/src/hooks/usePalette'
 import { Fragment } from 'react'
+import Instructions from './Instructions'
 
 import styles from './page.module.scss'
 import availabilityStyles from '/src/components/AvailabilityViewer/AvailabilityViewer.module.scss'
@@ -41,6 +42,7 @@ const EventAvailabilities = ({ event }: EventAvailabilitiesProps) => {
   const [tab, setTab] = useState<'group' | 'you' | 'vip'>('group')
   const [timezone, setTimezone] = useState(Intl.DateTimeFormat().resolvedOptions().timeZone)
   const [vipParticipants, setVipParticipants] = useState<string[]>([])
+  const [tempFocus, setTempFocus] = useState<string>()
 
   // Web worker for calculating the heatmap table
   const tableWorker = useRef<Worker>()
@@ -140,11 +142,22 @@ const EventAvailabilities = ({ event }: EventAvailabilitiesProps) => {
       </div>
     </Content>}
 
-            {tab === 'group' ? <AvailabilityViewer
-      times={expandedTimes}
-      people={people}
-      table={table}
-    /> : tab === 'vip' ? <div className={styles.vipContent}>
+            {tab === 'group' ? <>
+              <AvailabilityViewer
+                times={expandedTimes}
+                people={people}
+                table={table}
+                tempFocus={tempFocus}
+              />
+              <Instructions 
+                people={people}
+                eventId={event?.id ?? ''}
+                eventName={event?.name ?? ''}
+                timezone={timezone}
+                onTimezoneChange={setTimezone}
+                onHoverPerson={setTempFocus}
+              />
+            </> : tab === 'vip' ? <div className={styles.vipContent}>
       <Content>
         <h2>VIP Access</h2>
         <p>Welcome to the VIP area! This is only visible to the event creator.</p>
