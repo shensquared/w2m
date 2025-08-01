@@ -37,10 +37,10 @@ const login = (callback: (tokenResponse: google.accounts.oauth2.TokenResponse) =
 
 interface GoogleCalendarProps {
   timezone: string
-  timeStart: Temporal.ZonedDateTime
-  timeEnd: Temporal.ZonedDateTime
+  timeStart: any
+  timeEnd: any
   times: string[]
-  onImport: (availability: string[]) => void
+  onImport: (availability: Array<{ time: string; level: string }>) => void
 }
 
 const GoogleCalendar = ({ timezone, timeStart, timeEnd, times, onImport }: GoogleCalendarProps) => {
@@ -96,7 +96,8 @@ const GoogleCalendar = ({ timezone, timeStart, timeEnd, times, onImport }: Googl
           end: new Date(a.end).valueOf(),
         }))) : []
 
-        onImport(times.filter((_, i) => !availabilities.some(a => epochTimes[i] >= a.start && epochTimes[i] < a.end)))
+        onImport(times.filter((_, i) => !availabilities.some(a => epochTimes[i] >= a.start && epochTimes[i] < a.end))
+          .map(time => ({ time, level: 'preferred' })))
         setIsLoadingAvailability(false)
       }, e => {
         console.error(e)

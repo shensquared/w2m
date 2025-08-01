@@ -13,7 +13,7 @@ import styles from '../GoogleCalendar/GoogleCalendar.module.scss'
 interface RecentEventsProps {
   eventId?: string
   times: string[]
-  onImport: (availability: string[]) => void
+  onImport: (availability: Array<{ time: string; level: string }>) => void
 }
 
 const hasAvailability = (event: RecentEvent): event is Required<RecentEvent> => event.user !== undefined
@@ -24,7 +24,7 @@ const RecentEvents = ({ eventId, times, onImport }: RecentEventsProps) => {
   const allRecents = useStore(useRecentsStore, state => state.recents)
   const recents = useMemo(() => allRecents
     ?.filter(hasAvailability)
-    .filter(e => e.id !== eventId && e.user.availability.some(a => times.includes(a))) ?? [],
+    .filter(e => e.id !== eventId && e.user.availability.some(a => times.includes(a.time))) ?? [],
   [allRecents])
 
   const [isOpen, setIsOpen] = useState(false)
@@ -36,7 +36,7 @@ const RecentEvents = ({ eventId, times, onImport }: RecentEventsProps) => {
     const selectedRecent = recents.find(r => r.id === selected)
     if (!selectedRecent) return
 
-    onImport(selectedRecent.user.availability.filter(a => times.includes(a)))
+    onImport(selectedRecent.user.availability.filter(a => times.includes(a.time)))
   }, [selected, recents])
 
   // No recents
