@@ -26,8 +26,9 @@ interface AvailabilityInfo {
  * Takes an array of dates and an array of people,
  * where each person has a name and availability array, and returns the
  * group availability for each date passed in.
+ * VIP participants get double weight in the calculations.
  */
-export const calculateAvailability = (dates: string[], people: Person[]): AvailabilityInfo => {
+export const calculateAvailability = (dates: string[], people: Person[], vipParticipants: string[] = []): AvailabilityInfo => {
   let min = people.length // Start with max possible value
   let max = 0 // Start with min possible value
 
@@ -39,14 +40,25 @@ export const calculateAvailability = (dates: string[], people: Person[]): Availa
     people.forEach(person => {
       const timeAvailability = person.availability.find(a => a.time === date)
       if (timeAvailability) {
+        const isVip = vipParticipants.includes(person.name)
         switch (timeAvailability.level) {
           case 'preferred':
             preferred.push(person.name)
             available.push(person.name)
+            // VIP participants get double weight
+            if (isVip) {
+              preferred.push(person.name)
+              available.push(person.name)
+            }
             break
           case 'can_if_needed':
             canIfNeeded.push(person.name)
             available.push(person.name)
+            // VIP participants get double weight
+            if (isVip) {
+              canIfNeeded.push(person.name)
+              available.push(person.name)
+            }
             break
           case 'not_available':
           default:

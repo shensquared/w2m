@@ -78,3 +78,218 @@
   height: 1em;
   display: inline-block;
 }
+
+.vipContent {
+  margin: 20px 0;
+  
+  h2 {
+    color: var(--primary);
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  p {
+    text-align: center;
+    margin: 10px 0;
+    font-size: 16px;
+  }
+}
+
+.vipStats {
+  margin-top: 30px;
+  
+  h3 {
+    color: var(--primary);
+    text-align: center;
+    margin-bottom: 15px;
+  }
+  
+  p {
+    text-align: center;
+    margin: 10px 0;
+    font-size: 14px;
+    opacity: 0.8;
+  }
+}
+
+.participantList {
+  margin: 20px 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+
+.vipToggle {
+  background-color: var(--surface);
+  border: 1px solid var(--primary);
+  color: var(--primary);
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  min-width: 80px;
+  
+  &:hover {
+    background-color: var(--primary);
+    color: white;
+  }
+  
+  &:focus-visible {
+    outline: var(--focus-ring);
+    outline-offset: 2px;
+  }
+}
+
+.vipToggleActive {
+  background-color: var(--primary);
+  color: white;
+  
+  &:hover {
+    background-color: var(--primary);
+    opacity: 0.9;
+  }
+}
+
+.vipSummary {
+  margin-top: 20px;
+  padding: 16px;
+  background-color: var(--surface);
+  border: 1px solid var(--primary);
+  border-radius: 5px;
+  
+  h4 {
+    color: var(--primary);
+    margin: 0 0 8px 0;
+    text-align: center;
+  }
+  
+  p {
+    margin: 0;
+    text-align: center;
+    font-weight: 500;
+  }
+}
+
+.vipAvailabilitySection {
+  margin-top: 20px;
+  border-top: 2px solid var(--primary);
+  padding-top: 20px;
+  
+  h3 {
+    color: var(--primary);
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  
+  p {
+    text-align: center;
+    margin: 10px 0 20px 0;
+    font-size: 14px;
+    opacity: 0.8;
+  }
+}
+
+.vipAvailabilityWrapper {
+  margin-top: 20px;
+  
+  .heatmap {
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    padding: 0;
+  }
+  
+  .timeLabels {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    min-width: 60px;
+  }
+  
+  .timeSpace {
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right: 1px solid var(--border);
+    
+    &:last-child {
+      border-right: none;
+    }
+  }
+  
+  .timeLabel {
+    font-size: 12px;
+    color: var(--text);
+    font-weight: 500;
+  }
+  
+  .dateColumn {
+    display: flex;
+    flex-direction: column;
+    min-width: 80px;
+    border-right: 1px solid var(--border);
+    
+    &:last-child {
+      border-right: none;
+    }
+  }
+  
+  .dateLabel {
+    text-align: center;
+    font-size: 12px;
+    color: var(--text);
+    font-weight: 600;
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  
+  .dayLabel {
+    text-align: center;
+    font-size: 11px;
+    color: var(--text);
+    opacity: 0.7;
+    padding: 2px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  
+  .times {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  
+  .time {
+    height: 30px;
+    border-top: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+  
+  .timeSpace {
+    height: 30px;
+    border-top: 1px solid var(--border);
+  }
+  
+  .grey {
+    background-color: var(--loading);
+  }
+  
+  .nonEditable {
+    cursor: default;
+  }
+  
+  .highlight {
+    box-shadow: 0 0 0 2px var(--highlight-color);
+  }
+  
+  .columnSpacer {
+    width: 20px;
+  }
+}
