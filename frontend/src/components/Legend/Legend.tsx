@@ -9,34 +9,46 @@ interface LegendProps {
   max: number
   total: number
   palette: { string: string, highlight: string }[]
+  actualScores?: number[]
   onSegmentFocus: (segment: number | undefined) => void
 }
 
-const Legend = ({ min, max, total, palette, onSegmentFocus }: LegendProps) => {
+const Legend = ({ min, max, total, palette, actualScores, onSegmentFocus }: LegendProps) => {
   const { t } = useTranslation('event')
   const highlight = useStore(useSettingsStore, state => state.highlight)
   const setHighlight = useSettingsStore(state => state.setHighlight)
 
   return <div className={styles.wrapper}>
-    <label className={styles.label}>{min}/{total} {t('available')}</label>
+    <label className={styles.label}>Low availability</label>
 
     <div
       className={styles.bar}
-      onMouseOut={() => onSegmentFocus(undefined)}
+      onMouseOut={() => {
+        setHighlight(false)
+        onSegmentFocus(undefined)
+      }}
       onClick={() => setHighlight?.(!highlight)}
       title={t('group.legend_tooltip')}
     >
-      {[...Array(max + 1 - min).keys()].map(i => i + min).map((i, j) =>
+      {palette.map((color, j) =>
         <div
-          key={i}
-          style={{ flex: 1, backgroundColor: palette[j].string, '--highlight-color': palette[j].highlight } as React.CSSProperties}
-          className={highlight && i === max && max > 0 ? styles.highlight : undefined}
-          onMouseOver={() => onSegmentFocus(i)}
+          key={j}
+          style={{ flex: 1, backgroundColor: color.string, '--highlight-color': color.highlight } as React.CSSProperties}
+          className={highlight && j === palette.length - 1 ? styles.highlight : undefined}
+          onMouseOver={() => {
+            const score = actualScores && actualScores[j] !== undefined ? actualScores[j] : j
+            setHighlight(true)
+            onSegmentFocus(score)
+          }} // j is the palette index, score is the actual score value
+          onMouseOut={() => {
+            setHighlight(false)
+            onSegmentFocus(undefined)
+          }}
         />
       )}
     </div>
 
-    <label className={styles.label}>{max}/{total} {t('available')}</label>
+    <label className={styles.label}>High availability</label>
   </div>
 }
 
