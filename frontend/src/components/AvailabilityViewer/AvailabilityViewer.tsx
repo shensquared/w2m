@@ -95,9 +95,14 @@ const AvailabilityViewer = ({ times, people, table }: AvailabilityViewerProps) =
           />
 
           const availability = availabilities.find(a => a.date === cell.serialized)
-          const peopleHere = availability?.people ?? []
+          let peopleHere = availability?.people ?? []
           const preferredHere = availability?.preferred ?? []
           const canIfNeededHere = availability?.canIfNeeded ?? []
+          
+          // Filter to show only the hovered person's availability
+          if (tempFocus) {
+            peopleHere = peopleHere.filter(p => p === tempFocus)
+          }
 
           if (peopleHere.length === 0) return <div
             className={makeClass(styles.time, styles.nonEditable)}
@@ -229,6 +234,33 @@ const AvailabilityViewer = ({ times, people, table }: AvailabilityViewerProps) =
         </div>
       )}
     </div>}
+
+  {people.length > 1 && <>
+    <span className={styles.info}>{t('group.info2')}</span>
+    <div className={styles.people}>
+      {people.map(person =>
+        <button
+          type="button"
+          className={makeClass(
+            styles.person,
+            filteredPeople.includes(person.name) && styles.personSelected,
+          )}
+          key={person.name}
+          onClick={() => {
+            setTempFocus(undefined)
+            if (filteredPeople.includes(person.name)) {
+              setFilteredPeople(filteredPeople.filter(n => n !== person.name))
+            } else {
+              setFilteredPeople([...filteredPeople, person.name])
+            }
+          }}
+          onMouseOver={() => setTempFocus(person.name)}
+          onMouseOut={() => setTempFocus(undefined)}
+          title={person.name}
+        >{person.name}</button>
+      )}
+    </div>
+  </>}
   </>
 }
 
