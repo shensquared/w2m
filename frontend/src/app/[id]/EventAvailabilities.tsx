@@ -148,6 +148,9 @@ const EventAvailabilities = ({ event }: EventAvailabilitiesProps) => {
                 people={people}
                 table={table}
                 tempFocus={tempFocus}
+                onCopyTimeslot={(info) => {
+                  navigator.clipboard.writeText(info)
+                }}
               />
               <Instructions 
                 people={people}
@@ -156,6 +159,9 @@ const EventAvailabilities = ({ event }: EventAvailabilitiesProps) => {
                 timezone={timezone}
                 onTimezoneChange={setTimezone}
                 onHoverPerson={setTempFocus}
+                onCopyTimeslot={(info) => {
+                  navigator.clipboard.writeText(info)
+                }}
               />
             </> : tab === 'vip' ? <div className={styles.vipContent}>
       <Content>

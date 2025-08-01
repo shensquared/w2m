@@ -15,9 +15,10 @@ interface InstructionsProps {
   timezone: string
   onTimezoneChange: (timezone: string) => void
   onHoverPerson?: (personName: string | undefined) => void
+  onCopyTimeslot?: (timeslotInfo: string) => void
 }
 
-const Instructions = ({ people, eventId, eventName, timezone, onTimezoneChange, onHoverPerson }: InstructionsProps) => {
+const Instructions = ({ people, eventId, eventName, timezone, onTimezoneChange, onHoverPerson, onCopyTimeslot }: InstructionsProps) => {
   const { t, i18n } = useTranslation('event')
   const [copied, setCopied] = useState(false)
 
@@ -63,6 +64,10 @@ const Instructions = ({ people, eventId, eventName, timezone, onTimezoneChange, 
             >
               {copied ? 'Copied!' : 'here'}
             </button> to copy link</span>
+          </li>
+          
+          <li>
+            <span>Click on timeslot to copy its info</span>
           </li>
           
           <li>

@@ -25,9 +25,10 @@ interface AvailabilityViewerProps {
   }>
   table?: ReturnType<typeof calculateTable>
   tempFocus?: string
+  onCopyTimeslot?: (timeslotInfo: string) => void
 }
 
-const AvailabilityViewer = ({ times, people, table, tempFocus: propTempFocus }: AvailabilityViewerProps) => {
+const AvailabilityViewer = ({ times, people, table, tempFocus: propTempFocus, onCopyTimeslot }: AvailabilityViewerProps) => {
   const { t, i18n } = useTranslation('event')
 
   const highlight = useStore(useSettingsStore, state => state.highlight)
@@ -163,7 +164,7 @@ const AvailabilityViewer = ({ times, people, table, tempFocus: propTempFocus }: 
             }}
             onClick={() => {
               const clipboardMessage = `${t('group.clipboard_message', { date: cell.label })}:\n${peopleHere.join(', ')}${hasPreferred ? `\nPreferred: ${preferredHere.join(', ')}` : ''}${hasCanIfNeeded ? `\nCan if needed: ${canIfNeededHere.join(', ')}` : ''}`
-              navigator.clipboard.writeText(clipboardMessage)
+              onCopyTimeslot?.(clipboardMessage)
             }}
             onMouseLeave={() => setTooltip(undefined)}
           />
