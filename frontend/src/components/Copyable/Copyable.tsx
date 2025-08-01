@@ -7,7 +7,7 @@ import { makeClass } from '/src/utils'
 
 import styles from './Copyable.module.scss'
 
-interface CopyableProps extends Omit<React.ComponentProps<'p'>, 'children'> {
+interface CopyableProps extends Omit<React.ComponentProps<'div'>, 'children'> {
   children: string
 }
 
@@ -19,7 +19,7 @@ const Copyable = ({ children, className, ...props }: CopyableProps) => {
   const [canCopy, setCanCopy] = useState(false)
   useEffect(() => { setCanCopy('clipboard' in navigator) }, [])
 
-  return <p
+  return <div
     onClick={() => navigator.clipboard?.writeText(children)
       .then(() => {
         setCopied(t('nav.copied'))
@@ -30,7 +30,7 @@ const Copyable = ({ children, className, ...props }: CopyableProps) => {
     title={canCopy ? t('nav.title') : undefined}
     className={makeClass(className, canCopy && styles.copyable)}
     {...props}
-  >{copied ?? children}</p>
+  >{copied ?? children}</div>
 }
 
 export default Copyable

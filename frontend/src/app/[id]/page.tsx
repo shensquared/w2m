@@ -68,7 +68,7 @@ const Page = async ({ params }: PageProps) => {
 
       <EventAvailabilities event={event} />
 
-      <p className={makeClass(styles.info, styles.noPrint)}>
+      <div className={makeClass(styles.info, styles.noPrint)}>
 
         <Trans i18nKey="event:nav.shareinfo" t={t} i18n={i18n}>
               -
@@ -88,7 +88,7 @@ const Page = async ({ params }: PageProps) => {
                             _
         </Trans>
         <Copyable>{`https://w2m.shenshen.mit.edu/${event.id}`}</Copyable>
-      </p>
+      </div>
 
     </>
   )

@@ -53,14 +53,11 @@ async fn main() {
         .allow_origin(
             if cfg!(debug_assertions) {
                 "http://localhost:1234".to_owned()
-
             } else {
                 env::var("FRONTEND_URL").expect("Missing FRONTEND_URL environment variable")
             }
             .parse::<HeaderValue>()
             .unwrap(),
-        ).allow_origin(
-                "https://w2m.shenshen.mit.edu".to_owned().parse::<HeaderValue>().unwrap(),
         );
 
     // Rate limiting configuration (using tower_governor)
