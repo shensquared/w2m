@@ -2,6 +2,7 @@ use std::error::Error;
 
 use async_trait::async_trait;
 use chrono::{DateTime, Utc};
+use serde::{Deserialize, Serialize};
 
 /// Data storage adaptor, all methods on an adaptor can return an error if
 /// something goes wrong, or potentially None if the data requested was not found.
@@ -45,10 +46,23 @@ pub struct Event {
     pub timezone: String,
 }
 
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+pub enum AvailabilityLevel {
+    Preferred,
+    CanIfNeeded,
+    NotAvailable,
+}
+
+#[derive(Clone, Serialize, Deserialize)]
+pub struct TimeAvailability {
+    pub time: String,
+    pub level: AvailabilityLevel,
+}
+
 #[derive(Clone)]
 pub struct Person {
     pub name: String,
     pub password_hash: Option<String>,
     pub created_at: DateTime<Utc>,
-    pub availability: Vec<String>,
+    pub availability: Vec<TimeAvailability>,
 }

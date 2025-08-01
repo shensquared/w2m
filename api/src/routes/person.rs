@@ -4,7 +4,7 @@ use axum::{
     Json, TypedHeader,
 };
 use base64::{engine::general_purpose, Engine};
-use common::{Adaptor, Person};
+use common::{Adaptor, Person, TimeAvailability};
 
 use crate::{
     errors::ApiError,
@@ -188,6 +188,9 @@ pub async fn update_person<A: Adaptor>(
         return Err(ApiError::NotAuthorized);
     }
 
+    // Convert AvailabilityLevelResponse to TimeAvailability
+    let availability: Vec<TimeAvailability> = input.availability.into_iter().map(|a| a.into()).collect();
+
     Ok(Json(
         adaptor
             .upsert_person(
@@ -196,7 +199,7 @@ pub async fn update_person<A: Adaptor>(
                     name: existing_person.name,
                     password_hash: existing_person.password_hash,
                     created_at: existing_person.created_at,
-                    availability: input.availability,
+                    availability,
                 },
             )
             .await

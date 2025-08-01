@@ -1,5 +1,5 @@
 use axum::Json;
-use common::{Event, Person, Stats};
+use common::{Event, Person, Stats, TimeAvailability, AvailabilityLevel};
 use serde::{Deserialize, Serialize};
 use utoipa::ToSchema;
 
@@ -52,10 +52,45 @@ impl From<Stats> for StatsResponse {
     }
 }
 
+#[derive(Serialize, Deserialize, ToSchema)]
+pub struct AvailabilityLevelResponse {
+    pub time: String,
+    pub level: String, // "preferred", "can_if_needed", "not_available"
+}
+
+impl From<TimeAvailability> for AvailabilityLevelResponse {
+    fn from(value: TimeAvailability) -> Self {
+        let level_str = match value.level {
+            AvailabilityLevel::Preferred => "preferred",
+            AvailabilityLevel::CanIfNeeded => "can_if_needed", 
+            AvailabilityLevel::NotAvailable => "not_available",
+        };
+        Self {
+            time: value.time,
+            level: level_str.to_string(),
+        }
+    }
+}
+
+impl From<AvailabilityLevelResponse> for TimeAvailability {
+    fn from(value: AvailabilityLevelResponse) -> Self {
+        let level = match value.level.as_str() {
+            "preferred" => AvailabilityLevel::Preferred,
+            "can_if_needed" => AvailabilityLevel::CanIfNeeded,
+            "not_available" => AvailabilityLevel::NotAvailable,
+            _ => AvailabilityLevel::NotAvailable, // default fallback
+        };
+        Self {
+            time: value.time,
+            level,
+        }
+    }
+}
+
 #[derive(Serialize, ToSchema)]
 pub struct PersonResponse {
     pub name: String,
-    pub availability: Vec<String>,
+    pub availability: Vec<AvailabilityLevelResponse>,
     pub created_at: i64,
 }
 
@@ -63,7 +98,7 @@ impl From<Person> for PersonResponse {
     fn from(value: Person) -> Self {
         Self {
             name: value.name,
-            availability: value.availability,
+            availability: value.availability.into_iter().map(|a| a.into()).collect(),
             created_at: value.created_at.timestamp(),
         }
     }
@@ -71,5 +106,5 @@ impl From<Person> for PersonResponse {
 
 #[derive(Deserialize, ToSchema)]
 pub struct PersonInput {
-    pub availability: Vec<String>,
+    pub availability: Vec<AvailabilityLevelResponse>,
 }
