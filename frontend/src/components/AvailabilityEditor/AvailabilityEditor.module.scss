@@ -25,3 +25,29 @@
 .levelButtonActive {
   font-weight: 600;
 }
+
+.usageSection {
+  min-height: 140px;
+  
+  @media (max-width: 768px) {
+    min-height: 120px;
+  }
+  
+  @media (max-width: 480px) {
+    min-height: 100px;
+  }
+}
+
+.gridSpacer {
+  height: 20px;
+  
+  @media (max-width: 768px) {
+    height: 15px;
+  }
+  
+  @media (max-width: 480px) {
+    height: 10px;
+  }
+}
+
+

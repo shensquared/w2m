@@ -226,12 +226,21 @@
   background-color: var(--surface);
   border: 1px solid var(--border);
   border-radius: 5px;
+  min-height: 140px;
   
   h3 {
     color: var(--primary);
     margin: 0 0 16px 0;
     font-size: 16px;
     font-weight: 600;
+  }
+  
+  @media (max-width: 768px) {
+    min-height: 120px;
+  }
+  
+  @media (max-width: 480px) {
+    min-height: 100px;
   }
 }
 

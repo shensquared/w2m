@@ -34,7 +34,7 @@ const Instructions = ({ people, eventId, eventName, timezone, onTimezoneChange, 
   return (
     <Content>
       <div className={styles.instructions}>
-        <h3>Group Availability Usage:</h3>
+        <h3>Usage:</h3>
         
         <ul className={styles.instructionList}>
           <li className={styles.instructionItem}>

@@ -133,13 +133,17 @@ const AvailabilityEditor = ({ eventId, times, timezone, value = [], onChange, ta
   }, [getAvailabilityLevel, palette])
 
   return <>
-    <Content style={{ maxWidth: '1000px' }}>
+    <Content>
       <div style={{
         margin: '20px 0',
         padding: '16px',
         backgroundColor: 'var(--surface)',
         border: '1px solid var(--border)',
-        borderRadius: '5px'
+        borderRadius: '5px',
+        minHeight: '140px',
+        maxWidth: '1000px',
+        marginLeft: 'auto',
+        marginRight: 'auto'
       }}>
         <h3 style={{
           color: 'var(--primary)',
@@ -187,6 +191,9 @@ const AvailabilityEditor = ({ eventId, times, timezone, value = [], onChange, ta
         />
       </div>
     </Content>}
+
+    {/* Gap to align with Group availability tab */}
+    <div style={{ height: '22px' }}></div>
 
     <div className={viewerStyles.wrapper}>
       <div>

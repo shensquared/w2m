@@ -143,15 +143,6 @@ const EventAvailabilities = ({ event }: EventAvailabilitiesProps) => {
     </Content>}
 
             {tab === 'group' ? <>
-              <AvailabilityViewer
-                times={expandedTimes}
-                people={people}
-                table={table}
-                tempFocus={tempFocus}
-                onCopyTimeslot={(info) => {
-                  navigator.clipboard.writeText(info)
-                }}
-              />
               {user && <Instructions 
                 people={people}
                 eventId={event?.id ?? ''}
@@ -163,6 +154,15 @@ const EventAvailabilities = ({ event }: EventAvailabilitiesProps) => {
                   navigator.clipboard.writeText(info)
                 }}
               />}
+              <AvailabilityViewer
+                times={expandedTimes}
+                people={people}
+                table={table}
+                tempFocus={tempFocus}
+                onCopyTimeslot={(info) => {
+                  navigator.clipboard.writeText(info)
+                }}
+              />
             </> : tab === 'vip' ? <div className={styles.vipContent}>
       <Content>
         <h2>VIP Access</h2>
