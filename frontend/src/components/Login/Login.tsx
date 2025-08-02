@@ -40,6 +40,24 @@ const Login = ({ eventId, user, onChange }: LoginProps) => {
     return () => document.removeEventListener('focusName', focusName)
   }, [])
 
+  // Auto-fill username from sessionStorage if available
+  useEffect(() => {
+    if (eventId) {
+      const storedUsername = sessionStorage.getItem(`w2m-username-${eventId}`)
+      if (storedUsername) {
+        setValue('username', storedUsername)
+        // Clear the stored username after using it
+        sessionStorage.removeItem(`w2m-username-${eventId}`)
+        console.log('Auto-filled username:', storedUsername)
+        
+        // Auto-submit if no password is required
+        setTimeout(() => {
+          handleSubmit(onSubmit)({ username: storedUsername, password: '' })
+        }, 100)
+      }
+    }
+  }, [eventId, setValue])
+
   const onSubmit: SubmitHandler<typeof defaultValues> = async ({ username, password }) => {
     if (username.length === 0) {
       focusName()
