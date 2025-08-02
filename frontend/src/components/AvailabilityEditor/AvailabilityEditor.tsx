@@ -134,45 +134,42 @@ const AvailabilityEditor = ({ eventId, times, timezone, value = [], onChange, ta
   }, [getAvailabilityLevel, palette])
 
   return <>
-    <Content>
-      <div style={{
-        margin: '0 0 20px 0',
-        padding: '16px',
-        backgroundColor: 'white',
-        border: '1px solid purple',
-        borderRadius: '5px',
-        minHeight: '140px',
-        maxWidth: '1000px',
-        marginLeft: 'auto',
-        marginRight: 'auto'
+    <div style={{
+      margin: '-20px auto 20px auto',
+      padding: '16px',
+      backgroundColor: 'white',
+      border: '1px solid purple',
+      borderRadius: '5px',
+      minHeight: '140px',
+      width: '600px',
+      maxWidth: 'calc(100% - 60px)'
+    }}>
+      <h3 style={{
+        color: 'var(--primary)',
+        margin: '0 0 16px 0',
+        fontSize: '16px',
+        fontWeight: '600'
+      }}>Usage:</h3>
+      
+      <ul style={{
+        margin: 0,
+        paddingLeft: '20px',
+        listStyleType: 'disc'
       }}>
-        <h3 style={{
-          color: 'var(--primary)',
-          margin: '0 0 16px 0',
-          fontSize: '16px',
-          fontWeight: '600'
-        }}>Usage:</h3>
+        <li style={{ margin: '4px 0' }}>
+          <span>Drag to select multiple timeslots at once</span>
+        </li>
         
-        <ul style={{
-          margin: 0,
-          paddingLeft: '20px',
-          listStyleType: 'disc'
-        }}>
-          <li style={{ margin: '4px 0' }}>
-            <span>Drag to select multiple timeslots at once</span>
-          </li>
-          
-          <li style={{ margin: '4px 0' }}>
-            <span>Click timeslots to cycle: Preferred → Can if needed → Not available</span>
-          </li>
-          
-          <li style={{ margin: '4px 0' }}>
-            <span>Keyboard Shortcuts: Cmd/Ctrl+A (select all), Cmd/Ctrl+I (invert selections)</span>
-          </li>
-          
-        </ul>
-      </div>
-    </Content>
+        <li style={{ margin: '4px 0' }}>
+          <span>Click timeslots to cycle: Preferred → Can if needed → Not available</span>
+        </li>
+        
+        <li style={{ margin: '4px 0' }}>
+          <span>Keyboard Shortcuts: Cmd/Ctrl+A (select all), Cmd/Ctrl+I (invert selections)</span>
+        </li>
+        
+      </ul>
+    </div>
 
     {times[0]?.length === 13 && <Content>
       <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', gap: 12 }}>
