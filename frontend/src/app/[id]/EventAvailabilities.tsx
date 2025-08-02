@@ -19,6 +19,7 @@ import { calculateTable, expandTimes, makeClass, calculateAvailability } from '/
 import { usePalette } from '/src/hooks/usePalette'
 import { Fragment } from 'react'
 import Instructions from './Instructions'
+import { useFloating, offset, flip, shift } from '@floating-ui/react-dom'
 
 import styles from './page.module.scss'
 import availabilityStyles from '/src/components/AvailabilityViewer/AvailabilityViewer.module.scss'
@@ -268,6 +269,19 @@ const VipAvailabilityViewer = ({ times, people, table, vipParticipants }: VipAva
   const [filteredPeople, setFilteredPeople] = useState(people.map(p => p.name))
   const [focusCount, setFocusCount] = useState<number>()
 
+  const [tooltip, setTooltip] = useState<{
+    anchor: HTMLDivElement
+    available: string
+    date: string
+    people: string[]
+    preferred: string[]
+    canIfNeeded: string[]
+  }>()
+  const { refs, floatingStyles } = useFloating({
+    middleware: [offset(6), flip(), shift()],
+    elements: { reference: tooltip?.anchor },
+  })
+
   // Calculate VIP-weighted availabilities
   const { availabilities, min, max } = useMemo(() =>
     calculateAvailability(times, people.filter(p => filteredPeople.includes(p.name)), vipParticipants),
@@ -363,6 +377,23 @@ const VipAvailabilityViewer = ({ times, people, table, vipParticipants }: VipAva
             } as React.CSSProperties}
             aria-label={`${peopleHere.join(', ')}${hasPreferred ? ` (${preferredHere.length} preferred)` : ''}${hasCanIfNeeded ? ` (${canIfNeededHere.length} can if needed)` : ''}`}
             title={`${cell.label}: ${peopleHere.length} available (${preferredHere.length} preferred, ${canIfNeededHere.length} can if needed)`}
+            onMouseEnter={e => {
+              const preferredText = hasPreferred ? ` (${preferredHere.length} preferred)` : ''
+              const canIfNeededText = hasCanIfNeeded ? ` (${canIfNeededHere.length} can if needed)` : ''
+              setTooltip({
+                anchor: e.currentTarget,
+                available: `${peopleHere.length} / ${filteredPeople.length} ${t('available')}${preferredText}${canIfNeededText}`,
+                date: cell.label,
+                people: [],
+                preferred: [...new Set(preferredHere)].map(name => vipParticipants.includes(name) ? `★ ${name}` : name),
+                canIfNeeded: [...new Set(canIfNeededHere)].map(name => vipParticipants.includes(name) ? `★ ${name}` : name),
+              })
+            }}
+            onMouseLeave={() => setTooltip(undefined)}
+            onClick={() => {
+              const clipboardMessage = `Time: ${cell.label}.`
+              navigator.clipboard.writeText(clipboardMessage)
+            }}
           />
         })}
       </div>
@@ -407,6 +438,25 @@ const VipAvailabilityViewer = ({ times, people, table, vipParticipants }: VipAva
           </div>
         </div>
       </div>
+
+      {tooltip && <div
+        ref={refs.setFloating}
+        style={floatingStyles}
+        className={availabilityStyles.tooltip}
+      >
+        <div className={availabilityStyles.tooltipDate}>{tooltip.date}</div>
+        <div className={availabilityStyles.tooltipAvailable}>{tooltip.available}</div>
+        {tooltip.preferred.length > 0 && (
+          <div className={availabilityStyles.tooltipPreferred}>
+            Preferred: {tooltip.preferred.join(', ')}
+          </div>
+        )}
+        {tooltip.canIfNeeded.length > 0 && (
+          <div className={availabilityStyles.tooltipCanIfNeeded}>
+            Can if needed: {tooltip.canIfNeeded.join(', ')}
+          </div>
+        )}
+      </div>}
     </>
   )
 }
