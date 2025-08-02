@@ -64,7 +64,7 @@ const AvailabilityViewer = ({ times, people, table, tempFocus: propTempFocus, on
       }
     })
     const result = Array.from(scores).sort((a, b) => a - b)
-    console.log('Actual scores with 3 people:', result)
+    console.log('Actual scores with', people.length, 'people:', result)
     return result
   }, [availabilities])
 
