@@ -163,7 +163,7 @@ const AvailabilityViewer = ({ times, people, table, tempFocus: propTempFocus, on
               })
             }}
             onClick={() => {
-              const clipboardMessage = `${t('group.clipboard_message', { date: cell.label })}:\n${peopleHere.join(', ')}${hasPreferred ? `\nPreferred: ${preferredHere.join(', ')}` : ''}${hasCanIfNeeded ? `\nCan if needed: ${canIfNeededHere.join(', ')}` : ''}`
+              const clipboardMessage = `Time: ${cell.label}.`
               onCopyTimeslot?.(clipboardMessage)
             }}
             onMouseLeave={() => setTooltip(undefined)}

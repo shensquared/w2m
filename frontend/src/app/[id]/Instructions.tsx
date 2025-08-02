@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import { useTranslation } from '/src/i18n/client'
 import Content from '/src/components/Content/Content'
-import SelectField from '/src/components/SelectField/SelectField'
 import timezones from '/src/res/timezones.json'
 import { makeClass } from '/src/utils'
 import styles from './page.module.scss'
@@ -37,8 +36,22 @@ const Instructions = ({ people, eventId, eventName, timezone, onTimezoneChange, 
       <div className={styles.instructions}>
         <h3>Group Availability Usage:</h3>
         
-        <ol className={styles.instructionList}>
-          <li>
+        <ul className={styles.instructionList}>
+          <li className={styles.instructionItem}>
+            <span>📋 <button
+              type="button"
+              onClick={handleCopy}
+              className={styles.hereButton}
+            >
+              {copied ? 'Copied!' : 'click to copy this w2m link info'}
+            </button></span>
+          </li>
+          
+          <li className={styles.instructionItem}>
+            <span>Hover on timeslot to show availability; click to copy time info</span>
+          </li>
+          
+          <li className={styles.instructionItem}>
             <span>Show individual availability: </span>
             <div className={styles.people}>
               {people.map(person =>
@@ -56,35 +69,21 @@ const Instructions = ({ people, eventId, eventName, timezone, onTimezoneChange, 
             </div>
           </li>
           
-          <li>
-            <span>Click <button
-              type="button"
-              onClick={handleCopy}
-              className={styles.hereButton}
-            >
-              {copied ? 'Copied!' : 'here'}
-            </button> to copy link</span>
-          </li>
-          
-          <li>
-            <span>Click on timeslot to copy its info</span>
-          </li>
-          
-          <li>
+          {/* <li className={styles.instructionItem}>
             <span>Your timezone: </span>
-            <SelectField
-              label=""
+            <select
               name="timezone"
               id="timezone"
-              isInline
-              isHorizontal
               value={timezone}
-              onChange={event => onTimezoneChange(event.currentTarget.value)}
-              options={timezones}
-              style={{ width: '200px' }}
-            />
-          </li>
-        </ol>
+              onChange={(event: React.ChangeEvent<HTMLSelectElement>) => onTimezoneChange(event.currentTarget.value)}
+              className={styles.timezoneSelect}
+            >
+              {Object.entries(timezones).map(([key, value]) =>
+                <option key={key} value={key}>{value}</option>
+              )}
+            </select>
+          </li> */}
+        </ul>
       </div>
     </Content>
   )

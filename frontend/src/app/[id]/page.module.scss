@@ -312,13 +312,39 @@
 .instructionList {
   margin: 0;
   padding-left: 20px;
+  list-style-type: disc;
   
   li {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin: 8px 0;
+    display: list-item;
+    margin: 4px 0;
+    
+    > span, > div {
+      display: inline;
+    }
+    
+    select {
+      display: inline-block;
+      margin-left: 8px;
+    }
+  }
+}
+
+.timezoneSelect {
+  display: inline-block;
+  margin-left: 8px;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 4px 8px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  opacity: 0.8;
+  width: 200px;
+  
+  &:focus {
+    outline: var(--focus-ring);
+    outline-offset: 1px;
+    opacity: 1;
   }
 }
 
@@ -326,7 +352,8 @@
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin: 8px 0;
+  margin: 0;
+  align-items: center;
 }
 
 .person {

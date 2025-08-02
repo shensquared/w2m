@@ -1,14 +1,11 @@
 import { Suspense } from "react"
-import { Trans } from "react-i18next/TransWithoutContext"
 import { Metadata } from "next"
 import { notFound } from "next/navigation"
-import { Temporal } from "@js-temporal/polyfill"
 
 import Content from "/src/components/Content/Content"
-import Copyable from "/src/components/Copyable/Copyable"
 import { getEvent } from "/src/config/api"
 import { useTranslation } from "/src/i18n/server"
-import { makeClass, relativeTimeFormat } from "/src/utils"
+import { makeClass } from "/src/utils"
 
 import EventAvailabilities from "./EventAvailabilities"
 import styles from "./page.module.scss"
@@ -67,28 +64,6 @@ const Page = async ({ params }: PageProps) => {
       </Suspense>
 
       <EventAvailabilities event={event} />
-
-      <div className={makeClass(styles.info, styles.noPrint)}>
-
-        <Trans i18nKey="event:nav.shareinfo" t={t} i18n={i18n}>
-              -
-          <a
-            href={`mailto:?subject=${encodeURIComponent(
-              t("event:nav.email_subject", {
-                event_name: event.name,
-              })
-            )}&body=${encodeURIComponent(
-              `${t(
-                "event:nav.email_body"
-              )} https://w2m.shenshen.mit.edu/${event.id}`
-            )}`}
-          >
-                                _
-          </a>
-                            _
-        </Trans>
-        <Copyable>{`https://w2m.shenshen.mit.edu/${event.id}`}</Copyable>
-      </div>
 
     </>
   )
