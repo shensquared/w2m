@@ -133,18 +133,39 @@ const AvailabilityEditor = ({ eventId, times, timezone, value = [], onChange, ta
   }, [getAvailabilityLevel, palette])
 
   return <>
-    <Content isCentered>
-      <div>{t('you.info')}</div>
-    </Content>
-
-    <Content isCentered>
-      <div style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '16px' }}>
-        <span>{t('availability.instructions')}:</span>
-        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-          <span style={{ fontSize: '14px', color: '#666' }}>
-            {t('availability.click_to_cycle')}
-          </span>
-        </div>
+    <Content style={{ maxWidth: '1000px' }}>
+      <div style={{
+        margin: '20px 0',
+        padding: '16px',
+        backgroundColor: 'var(--surface)',
+        border: '1px solid var(--border)',
+        borderRadius: '5px'
+      }}>
+        <h3 style={{
+          color: 'var(--primary)',
+          margin: '0 0 16px 0',
+          fontSize: '16px',
+          fontWeight: '600'
+        }}>Usage:</h3>
+        
+        <ul style={{
+          margin: 0,
+          paddingLeft: '20px',
+          listStyleType: 'disc'
+        }}>
+          <li style={{ margin: '4px 0' }}>
+            <span>Drag to select multiple timeslots at once</span>
+          </li>
+          
+          <li style={{ margin: '4px 0' }}>
+            <span>Click timeslots to cycle: Preferred → Can if needed → Not available</span>
+          </li>
+          
+          <li style={{ margin: '4px 0' }}>
+            <span>Keyboard Shortcuts: Cmd/Ctrl+A (select all), Cmd/Ctrl+I (invert selections)</span>
+          </li>
+          
+        </ul>
       </div>
     </Content>
 
@@ -154,18 +175,6 @@ const AvailabilityEditor = ({ eventId, times, timezone, value = [], onChange, ta
           timezone={timezone}
           timeStart={parseSpecificDate(times[0])}
           timeEnd={parseSpecificDate(times[times.length - 1]).add({ minutes: 30 })}
-          times={times}
-          onImport={(importedTimes: Array<{ time: string; level: string }>) => {
-            const importedTimeStrings = importedTimes.map(t => t.time)
-            const newValue = times.map(time => ({
-              time,
-              level: importedTimeStrings.includes(time) ? 'preferred' : 'not_available'
-            }))
-            onChange(newValue)
-          }}
-        />
-        <RecentEvents
-          eventId={eventId}
           times={times}
           onImport={(importedTimes: Array<{ time: string; level: string }>) => {
             const importedTimeStrings = importedTimes.map(t => t.time)
