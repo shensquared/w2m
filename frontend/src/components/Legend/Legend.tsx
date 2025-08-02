@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useTranslation } from '/src/i18n/client'
 import { useStore } from '/src/stores'
 import useSettingsStore from '/src/stores/settingsStore'
@@ -17,6 +18,7 @@ const Legend = ({ min, max, total, palette, actualScores, onSegmentFocus }: Lege
   const { t } = useTranslation('event')
   const highlight = useStore(useSettingsStore, state => state.highlight)
   const setHighlight = useSettingsStore(state => state.setHighlight)
+  const [clickedSegment, setClickedSegment] = useState<number | undefined>()
 
   return <div className={styles.wrapper}>
     <label className={styles.label}>Low availability</label>
@@ -24,25 +26,44 @@ const Legend = ({ min, max, total, palette, actualScores, onSegmentFocus }: Lege
     <div
       className={styles.bar}
       onMouseOut={() => {
-        setHighlight(false)
-        onSegmentFocus(undefined)
+        if (!clickedSegment) {
+          setHighlight(false)
+          onSegmentFocus(undefined)
+        }
       }}
-      onClick={() => setHighlight?.(!highlight)}
       title={t('group.legend_tooltip')}
     >
       {palette.map((color, j) =>
         <div
           key={j}
           style={{ flex: 1, backgroundColor: color.string, '--highlight-color': color.highlight } as React.CSSProperties}
-          className={highlight && j === palette.length - 1 ? styles.highlight : undefined}
+          className={clickedSegment === j ? styles.highlight : undefined}
           onMouseOver={() => {
-            const score = actualScores && actualScores[j] !== undefined ? actualScores[j] : j
-            setHighlight(true)
-            onSegmentFocus(score)
-          }} // j is the palette index, score is the actual score value
+            if (!clickedSegment) {
+              const score = actualScores && actualScores[j] !== undefined ? actualScores[j] : j
+              setHighlight(true)
+              onSegmentFocus(score)
+            }
+          }}
           onMouseOut={() => {
-            setHighlight(false)
-            onSegmentFocus(undefined)
+            if (!clickedSegment) {
+              setHighlight(false)
+              onSegmentFocus(undefined)
+            }
+          }}
+          onClick={() => {
+            const score = actualScores && actualScores[j] !== undefined ? actualScores[j] : j
+            if (clickedSegment === j) {
+              // Clicking the same segment again clears the selection
+              setClickedSegment(undefined)
+              setHighlight(false)
+              onSegmentFocus(undefined)
+            } else {
+              // Clicking a new segment sets it as the clicked segment
+              setClickedSegment(j)
+              setHighlight(true)
+              onSegmentFocus(score)
+            }
           }}
         />
       )}
