@@ -153,7 +153,7 @@ const AvailabilityEditor = ({ eventId, times, timezone, value = [], onChange, ta
         <GoogleCalendar
           timezone={timezone}
           timeStart={parseSpecificDate(times[0])}
-          timeEnd={parseSpecificDate(times[times.length - 1]).add({ minutes: 15 })}
+          timeEnd={parseSpecificDate(times[times.length - 1]).add({ minutes: 30 })}
           times={times}
           onImport={(importedTimes: Array<{ time: string; level: string }>) => {
             const importedTimeStrings = importedTimes.map(t => t.time)

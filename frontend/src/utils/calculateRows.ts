@@ -14,13 +14,13 @@ export const calculateRows = (dates: Temporal.ZonedDateTime[]): (Temporal.PlainT
     .sort(Temporal.PlainTime.compare)
 
   // Partition by distance
-  const partitionedDates = splitArrayBy(sortedDates, (a, b) => !a.add({ minutes: 15 }).equals(b))
+  const partitionedDates = splitArrayBy(sortedDates, (a, b) => !a.add({ minutes: 30 }).equals(b))
 
   // Add end cap time and join
   return partitionedDates.reduce((rows, partition, i) => [
     ...rows,
     ...partition,
-    partition[partition.length - 1].add({ minutes: 15 }),
+    partition[partition.length - 1].add({ minutes: 30 }),
     ...i < partitionedDates.length - 1 ? [null, null] : [], // Add spacer in between partitions
   ], [] as (Temporal.PlainTime | null)[])
 }
