@@ -5,6 +5,7 @@ export interface RecentEvent {
   id: string
   name: string
   created_at: number
+  username?: string
   user?: {
     name: string
     availability: Array<{
