@@ -129,16 +129,14 @@ const EventAvailabilities = ({ event }: EventAvailabilitiesProps) => {
           type="button"
           onClick={() => setTab('group')}
         >{t('tabs.group')}</button>
-        {user && people.length > 0 && people[0]?.name === user.name && (
-          <button
-            className={makeClass(
-              styles.tab,
-              tab === 'vip' && styles.tabSelected,
-            )}
-            type="button"
-            onClick={() => setTab('vip')}
-          >VIP</button>
-        )}
+        <button
+          className={makeClass(
+            styles.tab,
+            tab === 'vip' && styles.tabSelected,
+          )}
+          type="button"
+          onClick={() => setTab('vip')}
+        >VIP</button>
       </div>
     </Content>}
 
@@ -163,66 +161,70 @@ const EventAvailabilities = ({ event }: EventAvailabilitiesProps) => {
                   navigator.clipboard.writeText(info)
                 }}
               />
-            </> : tab === 'vip' ? <div className={styles.vipContent}>
+            </> : tab === 'vip' ? <>
+      {/* VIP Usage Instructions */}
       <Content>
-        <h2>VIP Access</h2>
-        <p>Welcome to the VIP area! This is only visible to the event creator.</p>
-        <div className={styles.vipStats}>
-          <h3>Participants</h3>
-          <p>Mark participants as VIPs to give their preferences double weight in availability calculations.</p>
-          <div className={styles.participantList}>
-            {people.map(person => (
-              <button
-                key={person.name}
-                type="button"
-                className={makeClass(
-                  styles.vipToggle,
-                  vipParticipants.includes(person.name) && styles.vipToggleActive
+        <div className={styles.instructions}>
+          <h3>Usage:</h3>
+          
+          <ul className={styles.instructionList}>
+            <li className={styles.instructionItem}>
+              <span>Mark participants as VIPs to give their preferences double weight</span>
+            </li>
+            
+            <li className={styles.instructionItem}>
+              <span>VIP participants: </span>
+              <div className={styles.people}>
+                {people.map(person =>
+                  <button
+                    type="button"
+                    className={makeClass(
+                      styles.person,
+                      vipParticipants.includes(person.name) && styles.vipToggleActive
+                    )}
+                    key={person.name}
+                    onClick={() => {
+                      if (vipParticipants.includes(person.name)) {
+                        setVipParticipants(vipParticipants.filter(name => name !== person.name))
+                      } else {
+                        setVipParticipants([...vipParticipants, person.name])
+                      }
+                    }}
+                    title={`${person.name} - ${person.availability.length} time slots marked`}
+                  >
+                    {vipParticipants.includes(person.name) ? `★ ${person.name}` : `☆ ${person.name}`}
+                  </button>
                 )}
-                onClick={() => {
-                  if (vipParticipants.includes(person.name)) {
-                    setVipParticipants(vipParticipants.filter(name => name !== person.name))
-                  } else {
-                    setVipParticipants([...vipParticipants, person.name])
-                  }
-                }}
-                title={`${person.name} - ${person.availability.length} time slots marked`}
-              >
-                {vipParticipants.includes(person.name) ? `★ ${person.name}` : `☆ ${person.name}`}
-              </button>
-            ))}
-          </div>
+              </div>
+            </li>
+            
+            <li className={styles.instructionItem}>
+              <span>Hover on timeslot to show availability; click to copy time info</span>
+            </li>
+          </ul>
         </div>
       </Content>
-      
+
       {/* VIP Availability View with reweighted calculations */}
-      <div className={styles.vipAvailabilitySection}>
-        <Content>
-          {vipParticipants.length > 0 ? (
-            <>
-              <h3>VIP-Weighted Availability</h3>
-              <p>This view shows availability with VIP participants' preferences weighted double.</p>
-              <VipAvailabilityViewer
-                times={expandedTimes}
-                people={people}
-                table={table}
-                vipParticipants={vipParticipants}
-              />
-            </>
-          ) : (
-            <>
-              <h3>Raw Group Availability</h3>
-              <p>No VIPs selected. Showing standard group availability view.</p>
-              <AvailabilityViewer
-                times={expandedTimes}
-                people={people}
-                table={table}
-              />
-            </>
-          )}
-        </Content>
-      </div>
-    </div> : user && <AvailabilityEditor
+      {vipParticipants.length > 0 ? (
+        <VipAvailabilityViewer
+          times={expandedTimes}
+          people={people}
+          table={table}
+          vipParticipants={vipParticipants}
+        />
+      ) : (
+        <AvailabilityViewer
+          times={expandedTimes}
+          people={people}
+          table={table}
+          tempFocus={tempFocus}
+          onCopyTimeslot={(info) => {
+            navigator.clipboard.writeText(info)
+          }}
+        />
+      )}
+    </> : user && <AvailabilityEditor
       eventId={event?.id}
       times={expandedTimes}
       timezone={timezone}

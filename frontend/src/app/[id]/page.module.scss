@@ -143,12 +143,14 @@
 }
 
 .vipToggleActive {
-  background-color: var(--primary);
-  color: white;
+  background-color: var(--primary) !important;
+  color: white !important;
+  border-color: var(--primary) !important;
   
   &:hover {
-    background-color: var(--primary);
+    background-color: var(--primary) !important;
     opacity: 0.9;
+    border-color: var(--primary) !important;
   }
 }
 
@@ -293,7 +295,7 @@
 
 .person {
   background: var(--surface);
-  border: 1px solid var(--border);
+  border: 2px solid var(--border);
   border-radius: 4px;
   padding: 6px 12px;
   font-size: 14px;
@@ -303,6 +305,7 @@
   &:hover {
     background: var(--primary);
     color: white;
+    border-color: var(--primary);
   }
 }
 
