@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Trans } from 'react-i18next/TransWithoutContext'
 
 import AvailabilityEditor from '/src/components/AvailabilityEditor/AvailabilityEditor'
 import AvailabilityViewer from '/src/components/AvailabilityViewer/AvailabilityViewer'
@@ -74,9 +73,10 @@ const EventAvailabilities = ({ event }: EventAvailabilitiesProps) => {
         id: event.id,
         name: event.name,
         created_at: event.created_at,
+        username: user?.name,
       })
     }
-  }, [addRecent])
+  }, [addRecent, event, user?.name])
 
   // Refetch availabilities
   useEffect(() => {
@@ -152,7 +152,7 @@ const EventAvailabilities = ({ event }: EventAvailabilitiesProps) => {
                   navigator.clipboard.writeText(info)
                 }}
               />
-              <Instructions 
+              {user && <Instructions 
                 people={people}
                 eventId={event?.id ?? ''}
                 eventName={event?.name ?? ''}
@@ -162,7 +162,7 @@ const EventAvailabilities = ({ event }: EventAvailabilitiesProps) => {
                 onCopyTimeslot={(info) => {
                   navigator.clipboard.writeText(info)
                 }}
-              />
+              />}
             </> : tab === 'vip' ? <div className={styles.vipContent}>
       <Content>
         <h2>VIP Access</h2>
