@@ -5,6 +5,7 @@ import Content from '/src/components/Content/Content'
 import { usePalette } from '/src/hooks/usePalette'
 import { useTranslation } from '/src/i18n/client'
 import { calculateTable, makeClass, parseSpecificDate } from '/src/utils'
+import { UsageSection, UsageItem } from '/src/components/UsageSection'
 
 import styles from './AvailabilityEditor.module.scss'
 import GoogleCalendar from './components/GoogleCalendar/GoogleCalendar'
@@ -134,42 +135,19 @@ const AvailabilityEditor = ({ eventId, times, timezone, value = [], onChange, ta
   }, [getAvailabilityLevel, palette])
 
   return <>
-    <div style={{
-      margin: '-20px auto 20px auto',
-      padding: '16px',
-      backgroundColor: 'white',
-      border: '1px solid purple',
-      borderRadius: '5px',
-      minHeight: '140px',
-      width: '600px',
-      maxWidth: 'calc(100% - 60px)'
-    }}>
-      <h3 style={{
-        color: 'var(--primary)',
-        margin: '0 0 16px 0',
-        fontSize: '16px',
-        fontWeight: '600'
-      }}>Usage:</h3>
+    <UsageSection>
+      <UsageItem>
+        <span>Drag to select multiple timeslots at once</span>
+      </UsageItem>
       
-      <ul style={{
-        margin: 0,
-        paddingLeft: '20px',
-        listStyleType: 'disc'
-      }}>
-        <li style={{ margin: '4px 0' }}>
-          <span>Drag to select multiple timeslots at once</span>
-        </li>
-        
-        <li style={{ margin: '4px 0' }}>
-          <span>Click timeslots to cycle: Preferred → Can if needed → Not available</span>
-        </li>
-        
-        <li style={{ margin: '4px 0' }}>
-          <span>Keyboard Shortcuts: Cmd/Ctrl+A (select all), Cmd/Ctrl+I (invert selections)</span>
-        </li>
-        
-      </ul>
-    </div>
+      <UsageItem>
+        <span>Click timeslots to cycle: Preferred → Can if needed → Not available</span>
+      </UsageItem>
+      
+      <UsageItem>
+        <span>Keyboard Shortcuts: Cmd/Ctrl+A (select all), Cmd/Ctrl+I (invert selections)</span>
+      </UsageItem>
+    </UsageSection>
 
     {times[0]?.length === 13 && <Content>
       <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', gap: 12 }}>

@@ -20,6 +20,7 @@ import { usePalette } from '/src/hooks/usePalette'
 import { Fragment } from 'react'
 import Instructions from './Instructions'
 import { useFloating, offset, flip, shift } from '@floating-ui/react-dom'
+import { UsageSection, UsageItem } from '/src/components/UsageSection'
 
 import styles from './page.module.scss'
 import availabilityStyles from '/src/components/AvailabilityViewer/AvailabilityViewer.module.scss'
@@ -164,79 +165,57 @@ const EventAvailabilities = ({ event }: EventAvailabilitiesProps) => {
               />
             </> : tab === 'vip' ? <>
       {/* VIP Usage Instructions */}
-      <div style={{
-        margin: '-20px auto 20px auto',
-        padding: '16px',
-        backgroundColor: 'white',
-        border: '1px solid purple',
-        borderRadius: '5px',
-        minHeight: '140px',
-        width: '600px',
-        maxWidth: 'calc(100% - 60px)'
-      }}>
-        <h3 style={{
-          color: 'var(--primary)',
-          margin: '0 0 16px 0',
-          fontSize: '16px',
-          fontWeight: '600'
-        }}>Usage:</h3>
+      <UsageSection>
+        <UsageItem>
+          <span>Mark participants as VIPs to give their preferences double weight</span>
+        </UsageItem>
         
-        <ul style={{
-          margin: 0,
-          paddingLeft: '20px',
-          listStyleType: 'disc'
-        }}>
-          <li style={{ margin: '4px 0' }}>
-            <span>Mark participants as VIPs to give their preferences double weight</span>
-          </li>
-          
-          <li style={{ margin: '4px 0' }}>
-            <span>VIP participants: </span>
-            <div style={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              gap: '8px',
-              margin: 0,
-              alignItems: 'center'
-            }}>
-              {people.map(person =>
-                <button
-                  type="button"
-                  style={{
-                    background: 'var(--surface)',
-                    border: '2px solid var(--border)',
-                    borderRadius: '4px',
-                    padding: '6px 12px',
-                    fontSize: '14px',
-                    cursor: 'pointer',
-                    transition: 'all 0.2s',
-                    ...(vipParticipants.includes(person.name) && {
-                      background: 'var(--primary)',
-                      color: 'white',
-                      borderColor: 'var(--primary)'
-                    })
-                  }}
-                  key={person.name}
-                  onClick={() => {
-                    if (vipParticipants.includes(person.name)) {
-                      setVipParticipants(vipParticipants.filter(name => name !== person.name))
-                    } else {
-                      setVipParticipants([...vipParticipants, person.name])
-                    }
-                  }}
-                  title={`${person.name} - ${person.availability.length} time slots marked`}
-                >
-                  {vipParticipants.includes(person.name) ? `★ ${person.name}` : `☆ ${person.name}`}
-                </button>
-              )}
-            </div>
-          </li>
-          
-          <li style={{ margin: '4px 0' }}>
-            <span>Hover on timeslot to show availability; click to copy time info</span>
-          </li>
-        </ul>
-      </div>
+        <UsageItem>
+          <span>VIP participants: </span>
+          <div style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: '8px',
+            margin: 0,
+            alignItems: 'center'
+          }}>
+            {people.map(person =>
+              <button
+                type="button"
+                style={{
+                  background: 'var(--surface)',
+                  border: '2px solid var(--border)',
+                  borderRadius: '4px',
+                  padding: '6px 12px',
+                  fontSize: '14px',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s',
+                  ...(vipParticipants.includes(person.name) && {
+                    background: 'var(--primary)',
+                    color: 'white',
+                    borderColor: 'var(--primary)'
+                  })
+                }}
+                key={person.name}
+                onClick={() => {
+                  if (vipParticipants.includes(person.name)) {
+                    setVipParticipants(vipParticipants.filter(name => name !== person.name))
+                  } else {
+                    setVipParticipants([...vipParticipants, person.name])
+                  }
+                }}
+                title={`${person.name} - ${person.availability.length} time slots marked`}
+              >
+                {vipParticipants.includes(person.name) ? `★ ${person.name}` : `☆ ${person.name}`}
+              </button>
+            )}
+          </div>
+        </UsageItem>
+        
+        <UsageItem>
+          <span>Hover on timeslot to show availability; click to copy time info</span>
+        </UsageItem>
+      </UsageSection>
 
       {/* VIP Availability View with reweighted calculations */}
       {vipParticipants.length > 0 ? (
