@@ -11,6 +11,7 @@ import GoogleCalendar from './components/GoogleCalendar/GoogleCalendar'
 import RecentEvents from './components/RecentEvents/RecentEvents'
 import viewerStyles from '../AvailabilityViewer/AvailabilityViewer.module.scss'
 import Skeleton from '../AvailabilityViewer/components/Skeleton/Skeleton'
+import Legend from '../Legend/Legend'
 
 interface AvailabilityEditorProps {
   eventId?: string
@@ -135,10 +136,10 @@ const AvailabilityEditor = ({ eventId, times, timezone, value = [], onChange, ta
   return <>
     <Content>
       <div style={{
-        margin: '20px 0',
+        margin: '0 0 20px 0',
         padding: '16px',
-        backgroundColor: 'var(--surface)',
-        border: '1px solid var(--border)',
+        backgroundColor: 'white',
+        border: '1px solid purple',
         borderRadius: '5px',
         minHeight: '140px',
         maxWidth: '1000px',
@@ -192,8 +193,58 @@ const AvailabilityEditor = ({ eventId, times, timezone, value = [], onChange, ta
       </div>
     </Content>}
 
-    {/* Gap to align with Group availability tab */}
-    <div style={{ height: '22px' }}></div>
+    {/* Availability Level Color Strip */}
+    <Content>
+      <div style={{ marginTop: '-20px' }}>
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          margin: '10px 0'
+        }}>
+          <div style={{
+            display: 'flex',
+            height: '20px',
+            gap: '16px',
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <div style={{
+                width: '60px',
+                height: '20px',
+                backgroundColor: palette[0].string,
+                borderRadius: '3px',
+                border: '1px solid var(--text)'
+              }} />
+              <span style={{ fontSize: '12px' }}>Unavailable</span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <div style={{
+                width: '60px',
+                height: '20px',
+                backgroundColor: palette[1].string,
+                borderRadius: '3px',
+                border: '1px solid var(--text)'
+              }} />
+              <span style={{ fontSize: '12px' }}>Can if needed</span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <div style={{
+                width: '60px',
+                height: '20px',
+                backgroundColor: palette[2].string,
+                borderRadius: '3px',
+                border: '1px solid var(--text)'
+              }} />
+              <span style={{ fontSize: '12px' }}>Preferred</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Content>
+
+
 
     <div className={viewerStyles.wrapper}>
       <div>
