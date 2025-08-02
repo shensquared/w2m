@@ -18,8 +18,9 @@
   position: sticky;
   left: 0;
   z-index: 5;
-  overflow: hidden;
+  overflow: visible;
   padding-top: 1em;
+  padding-bottom: 1em;
   pointer-events: none;
   background: var(--background);
 }
@@ -27,10 +28,8 @@
 .timeSpace {
   height: 10px;
   position: relative;
+  border-top: 2px solid transparent;
   text-align: right;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
 
   &.grey {
     background-origin: border-box;
@@ -46,7 +45,7 @@
 
 .timeLabel {
   display: inline-block;
-  transform: translateY(calc(-50% - 2px));
+  transform: translateY(calc(-50% + 12px));
   font-size: 12px;
   user-select: none;
   background: var(--background);
@@ -95,6 +94,10 @@
     border-right: 2px solid var(--text);
     border-top-right-radius: 3px;
     border-bottom-right-radius: 3px;
+  }
+
+  & .time + .timespace, & .timespace:first-of-type {
+    border-top: 2px solid var(--text);
   }
 }
 
@@ -184,7 +187,7 @@
 
 .wrapper {
   overflow-y: visible;
-  margin: 20px 0 40px 0;
+  margin: 0;
   position: relative;
   display: flex;
   justify-content: center;
