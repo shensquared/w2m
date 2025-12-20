@@ -46,18 +46,28 @@ async fn main() {
     }));
 
     // CORS configuration
+    let allowed_origins = env::var("FRONTEND_URL")
+        .map(|url| vec![url])
+        .unwrap_or_else(|_| {
+            if cfg!(debug_assertions) {
+                vec!["http://localhost:1234".to_string()]
+            } else {
+                vec![
+                    "https://w2m.shenshen.mit.edu".to_string(),
+                    "https://w2m2.shenshen.mit.edu".to_string(),
+                ]
+            }
+        });
+
     let cors = CorsLayer::new()
         .allow_credentials(true)
         .allow_headers([AUTHORIZATION, ACCEPT, CONTENT_TYPE])
         .allow_methods([Method::GET, Method::POST, Method::PATCH])
         .allow_origin(
-            if cfg!(debug_assertions) {
-                "http://localhost:1234".to_owned()
-            } else {
-                env::var("FRONTEND_URL").expect("Missing FRONTEND_URL environment variable")
-            }
-            .parse::<HeaderValue>()
-            .unwrap(),
+            allowed_origins
+                .iter()
+                .map(|o| o.parse::<HeaderValue>().unwrap())
+                .collect::<Vec<_>>(),
         );
 
     // Rate limiting configuration (using tower_governor)

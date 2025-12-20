@@ -277,6 +277,7 @@ interface VipAvailabilityViewerProps {
 
 const VipAvailabilityViewer = ({ times, people, table, vipParticipants }: VipAvailabilityViewerProps) => {
   const { t } = useTranslation('event')
+  const highlight = useStore(useSettingsStore, state => state.highlight)
   const [filteredPeople, setFilteredPeople] = useState(people.map(p => p.name))
   const [focusCount, setFocusCount] = useState<number>()
 
@@ -366,7 +367,7 @@ const VipAvailabilityViewer = ({ times, people, table, vipParticipants }: VipAva
           const hasPreferred = preferredHere.length > 0
           const hasCanIfNeeded = canIfNeededHere.length > 0
 
-          const shouldHighlight = (focusCount === undefined || score === focusCount) && peopleHere.length > 0
+          const shouldHighlight = highlight && (focusCount === undefined || score === focusCount) && peopleHere.length > 0
 
           return <div
             key={y}
@@ -386,18 +387,19 @@ const VipAvailabilityViewer = ({ times, people, table, vipParticipants }: VipAva
               ...cell.minute !== 0 && cell.minute !== 30 && { borderTopColor: 'transparent' },
               ...cell.minute === 30 && { borderTopStyle: 'dotted' },
             } as React.CSSProperties}
-            aria-label={`${peopleHere.join(', ')}${hasPreferred ? ` (${preferredHere.length} preferred)` : ''}${hasCanIfNeeded ? ` (${canIfNeededHere.length} can if needed)` : ''}`}
-            title={`${cell.label}: ${peopleHere.length} available (${preferredHere.length} preferred, ${canIfNeededHere.length} can if needed)`}
+            aria-label={`${[...new Set(peopleHere)].join(', ')}${hasPreferred ? ` (${[...new Set(preferredHere)].length} preferred)` : ''}${hasCanIfNeeded ? ` (${[...new Set(canIfNeededHere)].length} can if needed)` : ''}`}
+            title={`${cell.label}: ${[...new Set(peopleHere)].length} available (${[...new Set(preferredHere)].length} preferred, ${[...new Set(canIfNeededHere)].length} can if needed)`}
             onMouseEnter={e => {
-              const preferredText = hasPreferred ? ` (${preferredHere.length} preferred)` : ''
-              const canIfNeededText = hasCanIfNeeded ? ` (${canIfNeededHere.length} can if needed)` : ''
+              const uniquePeople = [...new Set(peopleHere)]
+              const uniquePreferred = [...new Set(preferredHere)]
+              const uniqueCanIfNeeded = [...new Set(canIfNeededHere)]
               setTooltip({
                 anchor: e.currentTarget,
-                available: `${peopleHere.length} / ${filteredPeople.length} ${t('available')}${preferredText}${canIfNeededText}`,
+                available: `${uniquePeople.length} / ${filteredPeople.length} ${t('available')} · Weighted score: ${score}`,
                 date: cell.label,
                 people: [],
-                preferred: [...new Set(preferredHere)].map(name => vipParticipants.includes(name) ? `★ ${name}` : name),
-                canIfNeeded: [...new Set(canIfNeededHere)].map(name => vipParticipants.includes(name) ? `★ ${name}` : name),
+                preferred: uniquePreferred.map(name => vipParticipants.includes(name) ? `★ ${name}` : name),
+                canIfNeeded: uniqueCanIfNeeded.map(name => vipParticipants.includes(name) ? `★ ${name}` : name),
               })
             }}
             onMouseLeave={() => setTooltip(undefined)}
@@ -412,6 +414,7 @@ const VipAvailabilityViewer = ({ times, people, table, vipParticipants }: VipAva
   </Fragment>) ?? <div>Loading...</div>, [
     availabilities,
     table?.columns,
+    highlight,
     focusCount,
     t,
     palette,
@@ -429,6 +432,8 @@ const VipAvailabilityViewer = ({ times, people, table, vipParticipants }: VipAva
           actualScores={actualScores}
           total={filteredPeople.length}
           onSegmentFocus={setFocusCount}
+          lowLabel="Low preference"
+          highLabel="High preference"
         />
       </Content>
 

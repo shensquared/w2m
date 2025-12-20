@@ -137,15 +137,11 @@ const AvailabilityEditor = ({ eventId, times, timezone, value = [], onChange, ta
   return <>
     <UsageSection>
       <UsageItem>
-        <span>Drag to select multiple timeslots at once</span>
+        <span>Click or drag to select timeslots, then release to cycle: Preferred → Can if needed → Not available</span>
       </UsageItem>
-      
+
       <UsageItem>
-        <span>Click timeslots to cycle: Preferred → Can if needed → Not available</span>
-      </UsageItem>
-      
-      <UsageItem>
-        <span>Keyboard Shortcuts: Cmd/Ctrl+A (select all), Cmd/Ctrl+I (invert selections)</span>
+        <span>Keyboard: Cmd/Ctrl+A (all preferred), Shift+Cmd/Ctrl+A (clear all), Cmd/Ctrl+I (invert)</span>
       </UsageItem>
     </UsageSection>
 
@@ -192,7 +188,7 @@ const AvailabilityEditor = ({ eventId, times, timezone, value = [], onChange, ta
                 borderRadius: '3px',
                 border: '1px solid var(--text)'
               }} />
-              <span style={{ fontSize: '12px' }}>Unavailable</span>
+              <span style={{ fontSize: '12px' }}>Unavailable (0)</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <div style={{
@@ -202,7 +198,7 @@ const AvailabilityEditor = ({ eventId, times, timezone, value = [], onChange, ta
                 borderRadius: '3px',
                 border: '1px solid var(--text)'
               }} />
-              <span style={{ fontSize: '12px' }}>Can if needed</span>
+              <span style={{ fontSize: '12px' }}>Can if needed (1)</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <div style={{
@@ -212,7 +208,7 @@ const AvailabilityEditor = ({ eventId, times, timezone, value = [], onChange, ta
                 borderRadius: '3px',
                 border: '1px solid var(--text)'
               }} />
-              <span style={{ fontSize: '12px' }}>Preferred</span>
+              <span style={{ fontSize: '12px' }}>Preferred (2)</span>
             </div>
           </div>
         </div>

@@ -63,13 +63,14 @@ const AvailabilityViewer = ({ times, people, table, tempFocus: propTempFocus, on
         scores.add(score)
       }
     })
-    const result = Array.from(scores).sort((a, b) => a - b)
-    console.log('Actual scores with', people.length, 'people:', result)
-    return result
+    return Array.from(scores).sort((a, b) => a - b)
   }, [availabilities])
 
   // Create a palette based on the actual scores that exist
   const palette = usePalette(actualScores?.length || 1)
+
+  // Fixed 3-color palette for individual focus mode (matches AvailabilityEditor)
+  const individualPalette = usePalette(3)
 
 
 
@@ -94,12 +95,34 @@ const AvailabilityViewer = ({ times, people, table, tempFocus: propTempFocus, on
 
           const availability = availabilities.find(a => a.date === cell.serialized)
           let peopleHere = availability?.people ?? []
-          const preferredHere = availability?.preferred ?? []
-          const canIfNeededHere = availability?.canIfNeeded ?? []
-          
+          let preferredHere = availability?.preferred ?? []
+          let canIfNeededHere = availability?.canIfNeeded ?? []
+
           // Filter to show only the hovered person's availability
           if (tempFocus) {
-            peopleHere = peopleHere.filter(p => p === tempFocus)
+            const focusedPerson = people.find(p => p.name === tempFocus)
+            if (focusedPerson) {
+              const personAvailability = focusedPerson.availability.find(a => a.time === cell.serialized)
+              if (personAvailability && personAvailability.level !== 'not_available') {
+                peopleHere = [tempFocus]
+                // Create new arrays to reflect only this person's availability
+                if (personAvailability.level === 'preferred') {
+                  preferredHere = [tempFocus]
+                  canIfNeededHere = []
+                } else if (personAvailability.level === 'can_if_needed') {
+                  preferredHere = []
+                  canIfNeededHere = [tempFocus]
+                }
+              } else {
+                peopleHere = []
+                preferredHere = []
+                canIfNeededHere = []
+              }
+            } else {
+              peopleHere = []
+              preferredHere = []
+              canIfNeededHere = []
+            }
           }
 
           if (peopleHere.length === 0) return <div
@@ -113,14 +136,30 @@ const AvailabilityViewer = ({ times, people, table, tempFocus: propTempFocus, on
           />
 
           // Calculate color based on actual scores that exist
-          let colorIndex = 0
           const score = peopleHere.length > 0 ? preferredHere.length * 2 + canIfNeededHere.length * 1 : 0
-          if (peopleHere.length > 0 && actualScores && actualScores.length > 0) {
-            colorIndex = actualScores.indexOf(score)
-            if (colorIndex === -1) colorIndex = 0 // fallback
 
+          // Determine color based on whether we're showing individual or group availability
+          let color = { string: '#f79e00', highlight: '#e68a00' } // fallback
+
+          if (tempFocus && peopleHere.length > 0) {
+            // Use fixed 3-color palette for individual focus (matches AvailabilityEditor)
+            // Index 0 = not available, 1 = can if needed, 2 = preferred
+            const focusedPerson = people.find(p => p.name === tempFocus)
+            if (focusedPerson) {
+              const personAvailability = focusedPerson.availability.find(a => a.time === cell.serialized)
+              if (personAvailability) {
+                if (personAvailability.level === 'preferred') {
+                  color = individualPalette[2] // Green
+                } else if (personAvailability.level === 'can_if_needed') {
+                  color = individualPalette[1] // Yellow
+                }
+              }
+            }
+          } else if (peopleHere.length > 0 && actualScores && actualScores.length > 0 && palette) {
+            // Use dynamic palette for group availability
+            const colorIndex = actualScores.indexOf(score)
+            color = palette[colorIndex !== -1 ? colorIndex : 0] || palette[0]
           }
-          const color = palette?.[colorIndex] || palette?.[0] || { string: '#f79e00', highlight: '#e68a00' }
           
 
 
@@ -149,13 +188,29 @@ const AvailabilityViewer = ({ times, people, table, tempFocus: propTempFocus, on
               ...cell.minute !== 0 && cell.minute !== 30 && { borderTopColor: 'transparent' },
               ...cell.minute === 30 && { borderTopStyle: 'dotted' },
             } as React.CSSProperties}
-            aria-label={`${peopleHere.join(', ')}${hasPreferred ? ` (${preferredHere.length} preferred)` : ''}${hasCanIfNeeded ? ` (${canIfNeededHere.length} can if needed)` : ''}`}
+            aria-label={tempFocus && peopleHere.length > 0 
+              ? `${tempFocus}: ${preferredHere.length > 0 ? 'Preferred' : 'Can if needed'}`
+              : `${peopleHere.join(', ')}${hasPreferred ? ` (${preferredHere.length} preferred)` : ''}${hasCanIfNeeded ? ` (${canIfNeededHere.length} can if needed)` : ''}`
+            }
             onMouseEnter={e => {
-              const preferredText = hasPreferred ? ` (${preferredHere.length} preferred)` : ''
-              const canIfNeededText = hasCanIfNeeded ? ` (${canIfNeededHere.length} can if needed)` : ''
+              let availableText = ''
+              if (tempFocus && peopleHere.length > 0) {
+                const focusedPerson = people.find(p => p.name === tempFocus)
+                if (focusedPerson) {
+                  const personAvailability = focusedPerson.availability.find(a => a.time === cell.serialized)
+                  if (personAvailability) {
+                    availableText = `${tempFocus}: ${personAvailability.level === 'preferred' ? 'Preferred' : 'Can if needed'}`
+                  }
+                }
+              } else {
+                const preferredText = hasPreferred ? ` (${preferredHere.length} preferred)` : ''
+                const canIfNeededText = hasCanIfNeeded ? ` (${canIfNeededHere.length} can if needed)` : ''
+                availableText = `${peopleHere.length} / ${people.length} ${t('available')}${preferredText}${canIfNeededText}`
+              }
+              
               setTooltip({
                 anchor: e.currentTarget,
-                available: `${peopleHere.length} / ${people.length} ${t('available')}${preferredText}${canIfNeededText}`,
+                available: availableText,
                 date: cell.label,
                 people: peopleHere,
                 preferred: preferredHere,
@@ -179,8 +234,11 @@ const AvailabilityViewer = ({ times, people, table, tempFocus: propTempFocus, on
     min,
     t,
     palette,
+    individualPalette,
     tempFocus,
     focusCount,
+    people,
+    actualScores,
   ])
 
   return <>
@@ -192,6 +250,8 @@ const AvailabilityViewer = ({ times, people, table, tempFocus: propTempFocus, on
         actualScores={actualScores}
         total={people.length}
         onSegmentFocus={setFocusCount}
+        lowLabel="Low preference"
+        highLabel="High preference"
       />
     </Content>
 
