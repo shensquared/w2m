@@ -52,7 +52,7 @@ const Login = ({ eventId, user, onChange }: LoginProps) => {
         
         // Auto-submit if no password is required
         setTimeout(() => {
-          handleSubmit(onSubmit)({ username: storedUsername, password: '' })
+          onSubmit({ username: storedUsername, password: '' })
         }, 100)
       }
     }

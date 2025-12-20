@@ -150,7 +150,7 @@ const EventAvailabilities = ({ event }: EventAvailabilitiesProps) => {
                 timezone={timezone}
                 onTimezoneChange={setTimezone}
                 onHoverPerson={setTempFocus}
-                onCopyTimeslot={(info) => {
+                onCopyTimeslot={info => {
                   navigator.clipboard.writeText(info)
                 }}
               />}
@@ -159,7 +159,7 @@ const EventAvailabilities = ({ event }: EventAvailabilitiesProps) => {
                 people={people}
                 table={table}
                 tempFocus={tempFocus}
-                onCopyTimeslot={(info) => {
+                onCopyTimeslot={info => {
                   navigator.clipboard.writeText(info)
                 }}
               />
@@ -231,7 +231,7 @@ const EventAvailabilities = ({ event }: EventAvailabilitiesProps) => {
           people={people}
           table={table}
           tempFocus={tempFocus}
-          onCopyTimeslot={(info) => {
+          onCopyTimeslot={info => {
             navigator.clipboard.writeText(info)
           }}
         />
