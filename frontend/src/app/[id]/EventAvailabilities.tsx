@@ -103,7 +103,6 @@ const EventAvailabilities = ({ event }: EventAvailabilitiesProps) => {
       </Content>
     </Section>
 
-    {user &&
     <Content>
       <div className={styles.tabs}>
         <button
@@ -140,10 +139,10 @@ const EventAvailabilities = ({ event }: EventAvailabilitiesProps) => {
           onClick={() => setTab('vip')}
         >VIP</button>
       </div>
-    </Content>}
+    </Content>
 
             {tab === 'group' ? <>
-              {user && <Instructions 
+              <Instructions
                 people={people}
                 eventId={event?.id ?? ''}
                 eventName={event?.name ?? ''}
@@ -153,7 +152,7 @@ const EventAvailabilities = ({ event }: EventAvailabilitiesProps) => {
                 onCopyTimeslot={info => {
                   navigator.clipboard.writeText(info)
                 }}
-              />}
+              />
               <AvailabilityViewer
                 times={expandedTimes}
                 people={people}

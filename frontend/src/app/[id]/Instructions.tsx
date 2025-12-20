@@ -21,6 +21,7 @@ interface InstructionsProps {
 const Instructions = ({ people, eventId, eventName, timezone, onTimezoneChange, onHoverPerson, onCopyTimeslot }: InstructionsProps) => {
   const { t, i18n } = useTranslation('event')
   const [copied, setCopied] = useState(false)
+  const [lockedPerson, setLockedPerson] = useState<string | undefined>()
 
   const handleCopy = async () => {
     try {
@@ -69,7 +70,8 @@ const Instructions = ({ people, eventId, eventName, timezone, onTimezoneChange, 
             <button
               type="button"
               style={{
-                background: 'var(--surface)',
+                background: lockedPerson === person.name ? 'var(--primary)' : 'var(--surface)',
+                color: lockedPerson === person.name ? 'white' : 'inherit',
                 border: '2px solid var(--border)',
                 borderRadius: '4px',
                 padding: '6px 12px',
@@ -78,9 +80,26 @@ const Instructions = ({ people, eventId, eventName, timezone, onTimezoneChange, 
                 transition: 'all 0.2s'
               }}
               key={person.name}
-              onMouseOver={() => onHoverPerson?.(person.name)}
-              onMouseOut={() => onHoverPerson?.(undefined)}
-              title={person.name}
+              onClick={() => {
+                if (lockedPerson === person.name) {
+                  setLockedPerson(undefined)
+                  onHoverPerson?.(undefined)
+                } else {
+                  setLockedPerson(person.name)
+                  onHoverPerson?.(person.name)
+                }
+              }}
+              onMouseOver={() => {
+                if (!lockedPerson) {
+                  onHoverPerson?.(person.name)
+                }
+              }}
+              onMouseOut={() => {
+                if (!lockedPerson) {
+                  onHoverPerson?.(undefined)
+                }
+              }}
+              title={lockedPerson === person.name ? 'Click to unlock' : 'Click to lock, hover to preview'}
             >
               {person.name}
             </button>
