@@ -134,10 +134,41 @@ const AvailabilityEditor = ({ eventId, times, timezone, value = [], onChange, ta
     }
   }, [getAvailabilityLevel, palette])
 
+  // Check if this time is the first in a continuous range of the same availability level
+  const isFirstInRange = useCallback((time: string): boolean => {
+    const currentLevel = getAvailabilityLevel(time)
+    // Only mark preferred and can_if_needed ranges
+    if (currentLevel === 'not_available') return false
+
+    const currentIndex = times.indexOf(time)
+    if (currentIndex === -1) return false
+
+    // If it's the first time slot, it's the start of a range
+    if (currentIndex === 0) return true
+
+    // Check if the previous time slot has a different level
+    const previousTime = times[currentIndex - 1]
+    const previousLevel = getAvailabilityLevel(previousTime)
+
+    return previousLevel !== currentLevel
+  }, [times, getAvailabilityLevel])
+
+  // Get emoji for availability level
+  const getEmojiForLevel = useCallback((level: AvailabilityLevel): string => {
+    switch (level) {
+      case 'preferred':
+        return '😀'
+      case 'can_if_needed':
+        return '😐'
+      default:
+        return ''
+    }
+  }, [])
+
   return <>
     <UsageSection>
       <UsageItem>
-        <span>Click or drag to select timeslots, then release to cycle: Preferred → Can if needed → Not available</span>
+        <span>Click or drag to select timeslots, then release to cycle: Preferred 😀 → Can if needed 😐 → Not available</span>
       </UsageItem>
 
       <UsageItem>
@@ -196,8 +227,12 @@ const AvailabilityEditor = ({ eventId, times, timezone, value = [], onChange, ta
                 height: '20px',
                 backgroundColor: palette[1].string,
                 borderRadius: '3px',
-                border: '1px solid var(--text)'
-              }} />
+                border: '1px solid var(--text)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '14px'
+              }}>😐</div>
               <span style={{ fontSize: '12px' }}>Can if needed (1)</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -206,8 +241,12 @@ const AvailabilityEditor = ({ eventId, times, timezone, value = [], onChange, ta
                 height: '20px',
                 backgroundColor: palette[2].string,
                 borderRadius: '3px',
-                border: '1px solid var(--text)'
-              }} />
+                border: '1px solid var(--text)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '14px'
+              }}>😀</div>
               <span style={{ fontSize: '12px' }}>Preferred (2)</span>
             </div>
           </div>
@@ -251,6 +290,8 @@ const AvailabilityEditor = ({ eventId, times, timezone, value = [], onChange, ta
 
                   const isSelected = selecting.includes(cell.serialized)
                   const currentAvailabilityLevel = getAvailabilityLevel(cell.serialized)
+                  const showEmoji = isFirstInRange(cell.serialized)
+                  const emoji = showEmoji ? getEmojiForLevel(currentAvailabilityLevel) : ''
 
                   return <div
                     key={y}
@@ -261,6 +302,10 @@ const AvailabilityEditor = ({ eventId, times, timezone, value = [], onChange, ta
                       '--hover-color': getTimeHoverColor(cell.serialized),
                       ...cell.minute !== 0 && cell.minute !== 30 && { borderTopColor: 'transparent' },
                       ...cell.minute === 30 && { borderTopStyle: 'dotted' },
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '16px',
                     } as React.CSSProperties}
                     onPointerDown={e => {
                       e.preventDefault()
@@ -305,7 +350,9 @@ const AvailabilityEditor = ({ eventId, times, timezone, value = [], onChange, ta
                         }))
                       }
                     }}
-                  />
+                  >
+                    {emoji}
+                  </div>
                 })}
               </div>
             </div> : <div className={viewerStyles.columnSpacer} />}
