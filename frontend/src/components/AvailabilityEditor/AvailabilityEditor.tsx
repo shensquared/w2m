@@ -157,9 +157,9 @@ const AvailabilityEditor = ({ eventId, times, timezone, value = [], onChange, ta
   const getEmojiForLevel = useCallback((level: AvailabilityLevel): string => {
     switch (level) {
       case 'preferred':
-        return '😀'
+        return '😍'
       case 'can_if_needed':
-        return '😐'
+        return '🙂'
       default:
         return ''
     }
@@ -168,7 +168,47 @@ const AvailabilityEditor = ({ eventId, times, timezone, value = [], onChange, ta
   return <>
     <UsageSection>
       <UsageItem>
-        <span>Click or drag to select timeslots, then release to cycle: Preferred 😀 → Can if needed 😐 → Not available</span>
+        <span>Click or drag to select timeslots, then release to cycle through:</span>
+        <div style={{ display: 'flex', gap: '12px', marginTop: '8px', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <div style={{
+              width: '40px',
+              height: '24px',
+              backgroundColor: palette[2].string,
+              borderRadius: '3px',
+              border: '1px solid var(--text)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '14px'
+            }}>😍</div>
+            <span style={{ fontSize: '13px' }}>Preferred (2)</span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <div style={{
+              width: '40px',
+              height: '24px',
+              backgroundColor: palette[1].string,
+              borderRadius: '3px',
+              border: '1px solid var(--text)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '14px'
+            }}>🙂</div>
+            <span style={{ fontSize: '13px' }}>Can if needed (1)</span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <div style={{
+              width: '40px',
+              height: '24px',
+              backgroundColor: palette[0].string,
+              borderRadius: '3px',
+              border: '1px solid var(--text)'
+            }} />
+            <span style={{ fontSize: '13px' }}>Unavailable (0)</span>
+          </div>
+        </div>
       </UsageItem>
 
       <UsageItem>
@@ -194,67 +234,6 @@ const AvailabilityEditor = ({ eventId, times, timezone, value = [], onChange, ta
         />
       </div>
     </Content>}
-
-    {/* Availability Level Color Strip */}
-    <Content>
-      <div style={{ marginTop: '-20px' }}>
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          margin: '10px 0'
-        }}>
-          <div style={{
-            display: 'flex',
-            height: '20px',
-            gap: '16px',
-            justifyContent: 'center',
-            alignItems: 'center'
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <div style={{
-                width: '60px',
-                height: '20px',
-                backgroundColor: palette[0].string,
-                borderRadius: '3px',
-                border: '1px solid var(--text)'
-              }} />
-              <span style={{ fontSize: '12px' }}>Unavailable (0)</span>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <div style={{
-                width: '60px',
-                height: '20px',
-                backgroundColor: palette[1].string,
-                borderRadius: '3px',
-                border: '1px solid var(--text)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '14px'
-              }}>😐</div>
-              <span style={{ fontSize: '12px' }}>Can if needed (1)</span>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <div style={{
-                width: '60px',
-                height: '20px',
-                backgroundColor: palette[2].string,
-                borderRadius: '3px',
-                border: '1px solid var(--text)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '14px'
-              }}>😀</div>
-              <span style={{ fontSize: '12px' }}>Preferred (2)</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </Content>
-
-
 
     <div className={viewerStyles.wrapper}>
       <div>

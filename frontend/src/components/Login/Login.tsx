@@ -18,9 +18,10 @@ interface LoginProps {
   eventId?: string
   user: PersonResponse | undefined
   onChange: (user: PersonResponse | undefined, password?: string) => void
+  shareLink?: string
 }
 
-const Login = ({ eventId, user, onChange }: LoginProps) => {
+const Login = ({ eventId, user, onChange, shareLink }: LoginProps) => {
   const { t } = useTranslation('event')
 
   const {
@@ -33,6 +34,7 @@ const Login = ({ eventId, user, onChange }: LoginProps) => {
 
   const [error, setError] = useState<React.ReactNode>()
   const [isLoading, setIsLoading] = useState(false)
+  const [copied, setCopied] = useState(false)
 
   const focusName = useCallback(() => setFocus('username'), [setFocus])
   useEffect(() => {
@@ -57,6 +59,17 @@ const Login = ({ eventId, user, onChange }: LoginProps) => {
       }
     }
   }, [eventId, setValue])
+
+  const handleCopyLink = async () => {
+    if (!shareLink) return
+    try {
+      await navigator.clipboard.writeText(shareLink)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch (err) {
+      console.error('Failed to copy:', err)
+    }
+  }
 
   const onSubmit: SubmitHandler<typeof defaultValues> = async ({ username, password }) => {
     if (username.length === 0) {
@@ -87,7 +100,24 @@ const Login = ({ eventId, user, onChange }: LoginProps) => {
 
   return user ? <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', margin: '10px 0', flexWrap: 'wrap', gap: '10px' }}>
     <h2 style={{ margin: 0 }}>{t('form.signed_in', { name: user.name })}</h2>
-    <Button isSmall onClick={() => onChange(undefined)}>{t('form.logout_button')}</Button>
+    <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+      {shareLink && <button
+        type="button"
+        onClick={handleCopyLink}
+        style={{
+          background: 'none',
+          border: 'none',
+          color: 'var(--primary)',
+          cursor: 'pointer',
+          padding: 0,
+          font: 'inherit',
+          fontSize: '14px'
+        }}
+      >
+        {copied ? '✓ Copied!' : '📋 Copy event link'}
+      </button>}
+      <Button isSmall onClick={() => onChange(undefined)}>{t('form.logout_button')}</Button>
+    </div>
   </div> : <>
     <h3>{t('form.signed_out')}</h3>
     <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>

@@ -44,6 +44,7 @@ const EventAvailabilities = ({ event }: EventAvailabilitiesProps) => {
   const [timezone, setTimezone] = useState(Intl.DateTimeFormat().resolvedOptions().timeZone)
   const [vipParticipants, setVipParticipants] = useState<string[]>([])
   const [tempFocus, setTempFocus] = useState<string>()
+  const [shareLink, setShareLink] = useState<string>()
 
   // Web worker for calculating the heatmap table
   const tableWorker = useRef<Worker>()
@@ -80,6 +81,13 @@ const EventAvailabilities = ({ event }: EventAvailabilitiesProps) => {
     }
   }, [addRecent, event, user?.name])
 
+  // Set share link on client side only
+  useEffect(() => {
+    if (event?.id && typeof window !== 'undefined') {
+      setShareLink(`${window.location.origin}/${event.id}`)
+    }
+  }, [event?.id])
+
   // Refetch availabilities
   useEffect(() => {
     if (tab === 'group' && event) {
@@ -94,12 +102,16 @@ const EventAvailabilities = ({ event }: EventAvailabilitiesProps) => {
   return <>
     <Section id="login">
       <Content>
-        <Login eventId={event?.id} user={user} onChange={(u, p) => {
-          setUser(u)
-          setPassword(p)
-          setTab(u ? 'you' : 'group')
-        }} />
-
+        <Login
+          eventId={event?.id}
+          user={user}
+          shareLink={shareLink}
+          onChange={(u, p) => {
+            setUser(u)
+            setPassword(p)
+            setTab(u ? 'you' : 'group')
+          }}
+        />
       </Content>
     </Section>
 
@@ -315,10 +327,10 @@ const VipAvailabilityViewer = ({ times, people, table, vipParticipants }: VipAva
   // Create a palette based on the actual scores that exist
   const palette = usePalette(actualScores?.length || 1)
 
-  // Reselect everyone if the amount of people changes
+  // Reselect everyone if the people data changes
   useEffect(() => {
     setFilteredPeople(people.map(p => p.name))
-  }, [people.length])
+  }, [people])
 
   const heatmap = useMemo(() => table?.columns.map((column, x) => <Fragment key={x}>
     {column ? <div className={availabilityStyles.dateColumn}>

@@ -11,7 +11,7 @@ export const usePalette = (steps: number) => {
 
   return useMemo(() =>
     createPalette({
-      map: (colormap === undefined || colormap === 'crabfit') ? [[0, [247, 158, 0, 0]], [1, [247, 158, 0, 255]]] : colormap,
+      map: (colormap === undefined || colormap === 'crabfit') ? [[0, [255, 255, 255, 255]], [0.5, [255, 245, 157, 255]], [1, [129, 199, 132, 255]]] : colormap,
       steps: safeSteps,
     })
       .format('rgba')

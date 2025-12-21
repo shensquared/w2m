@@ -180,11 +180,6 @@ const AvailabilityViewer = ({ times, people, table, tempFocus: propTempFocus, on
             style={{
               backgroundColor: (focusCount === undefined || score === focusCount) ? color.string : 'transparent',
               '--highlight-color': color.highlight,
-              // Add a subtle pattern to indicate preferred times (no border)
-              ...hasPreferred && palette && palette.length > 0 && { 
-                backgroundImage: `linear-gradient(45deg, ${palette[palette.length - 1]?.string || '#f79e00'}20 25%, transparent 25%, transparent 50%, ${palette[palette.length - 1]?.string || '#f79e00'}20 50%, ${palette[palette.length - 1]?.string || '#f79e00'}20 75%, transparent 75%, transparent)`,
-                backgroundSize: '4px 4px'
-              },
               ...cell.minute !== 0 && cell.minute !== 30 && { borderTopColor: 'transparent' },
               ...cell.minute === 30 && { borderTopStyle: 'dotted' },
             } as React.CSSProperties}
