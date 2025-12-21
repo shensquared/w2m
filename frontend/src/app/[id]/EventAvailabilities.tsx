@@ -46,6 +46,34 @@ const EventAvailabilities = ({ event }: EventAvailabilitiesProps) => {
   const [tempFocus, setTempFocus] = useState<string>()
   const [shareLink, setShareLink] = useState<string>()
 
+  // Calculate actual scores for VIP tab
+  const vipActualScores = useMemo(() => {
+    if (tab !== 'vip') return []
+    const { availabilities } = calculateAvailability(expandedTimes, people, vipParticipants)
+    const scores = new Set<number>()
+    scores.add(0)
+    availabilities.forEach(availability => {
+      if (availability.people.length > 0) {
+        const score = availability.preferred.length * 2 + availability.canIfNeeded.length * 1
+        scores.add(score)
+      }
+    })
+    return Array.from(scores).sort((a, b) => a - b)
+  }, [tab, expandedTimes, people, vipParticipants])
+
+  // Create palette for VIP tab (must be called at top level, not inside useMemo)
+  const vipPalette = usePalette(vipActualScores?.length || 1)
+
+  // Generate gradient stops for VIP tab color bar
+  const vipGradientStops = useMemo(() => {
+    if (tab !== 'vip' || !vipPalette || vipPalette.length === 0) return ''
+    return vipPalette.map((color, i) => {
+      const start = (i / vipPalette.length) * 100
+      const end = ((i + 1) / vipPalette.length) * 100
+      return `${color.string} ${start}%, ${color.string} ${end}%`
+    }).join(', ')
+  }, [tab, vipPalette])
+
   // Web worker for calculating the heatmap table
   const tableWorker = useRef<Worker>()
 
@@ -178,11 +206,11 @@ const EventAvailabilities = ({ event }: EventAvailabilitiesProps) => {
       {/* VIP Usage Instructions */}
       <UsageSection>
         <UsageItem>
-          <span>Mark participants as VIPs to give their preferences double weight</span>
+          <span>Hover on timeslot to show availability; click to copy time info</span> 
         </UsageItem>
-        
+
         <UsageItem>
-          <span>VIP participants: </span>
+          <span>Mark participants as VIPs to give their preferences double weight: </span>
           <div style={{
             display: 'flex',
             flexWrap: 'wrap',
@@ -221,10 +249,6 @@ const EventAvailabilities = ({ event }: EventAvailabilitiesProps) => {
               </button>
             )}
           </div>
-        </UsageItem>
-        
-        <UsageItem>
-          <span>Hover on timeslot to show availability; click to copy time info</span>
         </UsageItem>
       </UsageSection>
 

@@ -216,6 +216,15 @@ const AvailabilityEditor = ({ eventId, times, timezone, value = [], onChange, ta
       </UsageItem>
     </UsageSection>
 
+    {/* Invisible spacer to match the height of color bar UsageItem in Group/VIP tabs */}
+    <div style={{
+      visibility: 'hidden',
+      height: '2px',
+      margin: '0 auto 20px auto',
+      width: '600px',
+      maxWidth: 'calc(100% - 60px)'
+    }} />
+
     {times[0]?.length === 13 && <Content>
       <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', gap: 12 }}>
         <GoogleCalendar
