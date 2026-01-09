@@ -48,12 +48,13 @@ export type StatsResponse = z.infer<typeof StatsResponse>
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3034'
 
 async function apiCall<T>(endpoint: string, options?: RequestInit): Promise<T> {
+  const { headers, ...restOptions } = options ?? {}
   const response = await fetch(`${API_BASE}${endpoint}`, {
+    ...restOptions,
     headers: {
       'Content-Type': 'application/json',
-      ...options?.headers,
+      ...headers,
     },
-    ...options,
   })
 
   if (!response.ok) {
