@@ -17,6 +17,7 @@ Run these before opening a pull request. They match the checks in `.github/workf
 | `frontend` | `yarn tsc` |
 | `frontend` | `yarn lint` |
 | `api` | `cargo clippy` |
+| `mcp` | `uv run pytest` |
 
 ### Translations
 
