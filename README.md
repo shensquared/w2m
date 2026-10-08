@@ -93,12 +93,14 @@ See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the issue and pull request process.
 - **Copy a time slot.** Hover over a slot in the group view to see who is free, and click it to copy the time.
 - **Usage instructions** on each tab.
 - **Remembered names.** Recently visited events remember the name you used, so opening one fills in the login form for you.
-- **W2M branding.** The landing page shows only the create form and your recent events. The Crab Fit about section, video, app download buttons, and donation links are gone.
-- **API defaults.** The API listens on port 3034, and release builds fall back to the W2M site as the allowed origin when `FRONTEND_URL` is unset.
 
 ## License
 
 W2M is licensed under the [GNU General Public License v3.0](LICENSE), the same license as Crab Fit.
+
+## Acknowledgments
+
+Built on the foundation of [crab.fit](https://github.com/GRA0007/crab.fit) by [@GRA0007](https://github.com/GRA0007).
 
 ---
 
