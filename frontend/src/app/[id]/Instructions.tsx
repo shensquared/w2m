@@ -1,7 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { UsageSection, UsageItem } from '/src/components/UsageSection'
+
+import { UsageItem, UsageSection } from '/src/components/UsageSection'
 
 interface InstructionsProps {
   people: Array<{ name: string }>

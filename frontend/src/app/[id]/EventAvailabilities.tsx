@@ -1,29 +1,29 @@
 'use client'
 
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { Fragment } from 'react'
+import { flip, offset, shift, useFloating } from '@floating-ui/react-dom'
 
 import AvailabilityEditor from '/src/components/AvailabilityEditor/AvailabilityEditor'
 import AvailabilityViewer from '/src/components/AvailabilityViewer/AvailabilityViewer'
+import availabilityStyles from '/src/components/AvailabilityViewer/AvailabilityViewer.module.scss'
 import Content from '/src/components/Content/Content'
 import Legend from '/src/components/Legend/Legend'
 import Login from '/src/components/Login/Login'
 import Section from '/src/components/Section/Section'
 import SelectField from '/src/components/SelectField/SelectField'
+import { UsageItem, UsageSection } from '/src/components/UsageSection'
 import { EventResponse, getPeople, PersonResponse, updatePerson } from '/src/config/api'
+import { usePalette } from '/src/hooks/usePalette'
 import { useTranslation } from '/src/i18n/client'
 import timezones from '/src/res/timezones.json'
 import { useStore } from '/src/stores'
 import useRecentsStore from '/src/stores/recentsStore'
 import useSettingsStore from '/src/stores/settingsStore'
-import { calculateTable, expandTimes, makeClass, calculateAvailability } from '/src/utils'
-import { usePalette } from '/src/hooks/usePalette'
-import { Fragment } from 'react'
-import Instructions from './Instructions'
-import { useFloating, offset, flip, shift } from '@floating-ui/react-dom'
-import { UsageSection, UsageItem } from '/src/components/UsageSection'
+import { calculateAvailability, calculateTable, expandTimes, makeClass } from '/src/utils'
 
+import Instructions from './Instructions'
 import styles from './page.module.scss'
-import availabilityStyles from '/src/components/AvailabilityViewer/AvailabilityViewer.module.scss'
 
 interface EventAvailabilitiesProps {
   event?: EventResponse
@@ -181,28 +181,28 @@ const EventAvailabilities = ({ event }: EventAvailabilitiesProps) => {
       </div>
     </Content>
 
-            {tab === 'group' ? <>
-              <Instructions
-                people={people}
-                eventId={event?.id ?? ''}
-                eventName={event?.name ?? ''}
-                timezone={timezone}
-                onTimezoneChange={setTimezone}
-                onHoverPerson={setTempFocus}
-                onCopyTimeslot={info => {
-                  navigator.clipboard.writeText(info)
-                }}
-              />
-              <AvailabilityViewer
-                times={expandedTimes}
-                people={people}
-                table={table}
-                tempFocus={tempFocus}
-                onCopyTimeslot={info => {
-                  navigator.clipboard.writeText(info)
-                }}
-              />
-            </> : tab === 'vip' ? <>
+    {tab === 'group' ? <>
+      <Instructions
+        people={people}
+        eventId={event?.id ?? ''}
+        eventName={event?.name ?? ''}
+        timezone={timezone}
+        onTimezoneChange={setTimezone}
+        onHoverPerson={setTempFocus}
+        onCopyTimeslot={info => {
+          navigator.clipboard.writeText(info)
+        }}
+      />
+      <AvailabilityViewer
+        times={expandedTimes}
+        people={people}
+        table={table}
+        tempFocus={tempFocus}
+        onCopyTimeslot={info => {
+          navigator.clipboard.writeText(info)
+        }}
+      />
+    </> : tab === 'vip' ? <>
       {/* VIP Usage Instructions */}
       <UsageSection>
         <UsageItem>

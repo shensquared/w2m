@@ -1,14 +1,14 @@
 'use client'
 
-import { Fragment, useMemo, useState, useEffect } from 'react'
+import { Fragment, useEffect, useMemo, useState } from 'react'
+import { flip, offset, shift, useFloating } from '@floating-ui/react-dom'
 
 import Content from '/src/components/Content/Content'
-import { useFloating, flip, offset, shift } from '@floating-ui/react-dom'
 import { usePalette } from '/src/hooks/usePalette'
 import { useTranslation } from '/src/i18n/client'
-import { calculateAvailability, makeClass, calculateTable } from '/src/utils'
 import { useStore } from '/src/stores'
 import useSettingsStore from '/src/stores/settingsStore'
+import { calculateAvailability, calculateTable, makeClass } from '/src/utils'
 
 import styles from './AvailabilityViewer.module.scss'
 import Skeleton from './components/Skeleton/Skeleton'
