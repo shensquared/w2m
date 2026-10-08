@@ -1,4 +1,4 @@
-# systemd unit for the hosted w2m-mcp endpoint.
+# systemd unit for the hosted w2m-mcp endpoint, on the w2m container next to the API.
 # Install: sudo cp deploy/w2m-mcp.service /etc/systemd/system/ && sudo systemctl daemon-reload
 # Secrets live in /etc/w2m-mcp/env (see deploy/env.example), never in this file.
 
@@ -9,18 +9,19 @@ Wants=network-online.target
 
 [Service]
 Type=simple
-User=shenshen
-Group=shenshen
-WorkingDirectory=/home/shenshen/code/w2m-mcp
+User=shensquared
+Group=shensquared
+WorkingDirectory=/home/shensquared/w2m/mcp
 EnvironmentFile=/etc/w2m-mcp/env
-Environment=W2M_MCP_HOST=127.0.0.1
+# nginx runs on portal, a separate machine, so listen on every address rather than loopback.
+Environment=W2M_MCP_HOST=0.0.0.0
 Environment=W2M_MCP_PORT=8765
 # OAuth client registrations and encrypted upstream tokens persist here,
 # so people stay signed in across restarts.
 Environment=FASTMCP_HOME=/var/lib/w2m-mcp
 StateDirectory=w2m-mcp
-# Use the path `which uv` prints on portal.
-ExecStart=/home/shenshen/.local/bin/uv run --frozen --no-dev w2m-mcp --http
+# Use the path `which uv` prints for the service user.
+ExecStart=/home/shensquared/.local/bin/uv run --frozen --no-dev w2m-mcp --http
 Restart=on-failure
 RestartSec=5
 

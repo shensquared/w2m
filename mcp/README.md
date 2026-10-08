@@ -39,13 +39,13 @@ After GitHub sign-in, anyone whose GitHub username is not on the list sees "GitH
 
 ## Run it locally
 
-You need [uv](https://docs.astral.sh/uv/). Clone this repository, then from its root:
+You need [uv](https://docs.astral.sh/uv/). Clone this repository, then from its `mcp/` folder:
 
 ```sh
 uv sync
 ```
 
-This creates the environment in `./.venv`. Run the tests with:
+This creates the environment in `mcp/.venv`. Run the tests with:
 
 ```sh
 uv run pytest
@@ -55,10 +55,10 @@ To start the server by hand, run `uv run w2m-mcp`. It logs one line to stderr an
 
 ## Add the local server to Claude Code
 
-Replace `/absolute/path/to/w2m-mcp` with where you cloned the repository:
+Replace `/absolute/path/to/w2m` with where you cloned the repository:
 
 ```sh
-claude mcp add --scope user w2m -- uv run --directory /absolute/path/to/w2m-mcp w2m-mcp
+claude mcp add --scope user w2m -- uv run --directory /absolute/path/to/w2m/mcp w2m-mcp
 ```
 
 `--scope user` makes it available in every project; leave it out to add it to the current project only. Run `/mcp` inside Claude Code to check that `w2m` is connected.
@@ -72,7 +72,7 @@ Add this entry to `claude_desktop_config.json` (on macOS, `~/Library/Application
   "mcpServers": {
     "w2m": {
       "command": "/absolute/path/to/uv",
-      "args": ["run", "--directory", "/absolute/path/to/w2m-mcp", "w2m-mcp"]
+      "args": ["run", "--directory", "/absolute/path/to/w2m/mcp", "w2m-mcp"]
     }
   }
 }
@@ -100,7 +100,7 @@ The hosted mode starts with `w2m-mcp --http` (or `W2M_MCP_TRANSPORT=http`) and a
 | `W2M_MCP_GITHUB_CLIENT_SECRET` | required | Client secret of the GitHub OAuth App. |
 | `W2M_MCP_ALLOWED_GITHUB_USERS` | required | GitHub usernames allowed to use the tools, separated by commas or spaces; case does not matter. |
 | `W2M_MCP_JWT_SIGNING_KEY` | derived from the client secret | Long random string that signs the tokens handed to MCP clients. Changing it signs everyone out. |
-| `W2M_MCP_HOST` | `127.0.0.1` | Listen address. Keep it on loopback behind nginx. |
+| `W2M_MCP_HOST` | `127.0.0.1` | Listen address. Loopback suits nginx on the same machine. The unit in `deploy/` sets `0.0.0.0`, because nginx runs on a separate machine. |
 | `W2M_MCP_PORT` | `8765` | Listen port. |
 | `FASTMCP_HOME` | the user data directory | Where the OAuth proxy keeps client registrations and encrypted tokens. |
 
@@ -108,7 +108,7 @@ The hosted mode starts with `w2m-mcp --http` (or `W2M_MCP_TRANSPORT=http`) and a
 
 The hosted mode serves the same four tools over MCP Streamable HTTP. [FastMCP](https://gofastmcp.com/)'s GitHub provider acts as the OAuth authorization server that MCP clients expect: it registers clients, shows a consent page, sends the person to GitHub, and issues its own tokens. The server learns only the person's GitHub username, which it checks against `W2M_MCP_ALLOWED_GITHUB_USERS` at sign-in and again on every tool call. Everyone else is refused with a message naming their account.
 
-To add or remove someone, edit `W2M_MCP_ALLOWED_GITHUB_USERS` in the service's environment file (`/etc/w2m-mcp/env` on portal) and restart the service:
+To add or remove someone, edit `W2M_MCP_ALLOWED_GITHUB_USERS` in the service's environment file (`/etc/w2m-mcp/env` on the w2m container) and restart the service:
 
 ```sh
 sudoedit /etc/w2m-mcp/env
