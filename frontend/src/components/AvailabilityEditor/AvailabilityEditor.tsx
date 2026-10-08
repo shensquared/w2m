@@ -1,18 +1,14 @@
 import { Fragment, useCallback, useEffect, useRef, useState } from 'react'
 
-import Button from '/src/components/Button/Button'
 import Content from '/src/components/Content/Content'
 import { UsageItem, UsageSection } from '/src/components/UsageSection'
 import { usePalette } from '/src/hooks/usePalette'
 import { useTranslation } from '/src/i18n/client'
 import { calculateTable, makeClass, parseSpecificDate } from '/src/utils'
 
-import styles from './AvailabilityEditor.module.scss'
 import GoogleCalendar from './components/GoogleCalendar/GoogleCalendar'
-import RecentEvents from './components/RecentEvents/RecentEvents'
 import viewerStyles from '../AvailabilityViewer/AvailabilityViewer.module.scss'
 import Skeleton from '../AvailabilityViewer/components/Skeleton/Skeleton'
-import Legend from '../Legend/Legend'
 
 interface AvailabilityEditorProps {
   eventId?: string
@@ -28,7 +24,7 @@ interface AvailabilityEditorProps {
 
 type AvailabilityLevel = 'preferred' | 'can_if_needed' | 'not_available'
 
-const AvailabilityEditor = ({ eventId, times, timezone, value = [], onChange, table }: AvailabilityEditorProps) => {
+const AvailabilityEditor = ({ times, timezone, value = [], onChange, table }: AvailabilityEditorProps) => {
   const { t } = useTranslation('event')
 
   // Ref and state required to rerender but also access static version in callbacks
@@ -50,12 +46,6 @@ const AvailabilityEditor = ({ eventId, times, timezone, value = [], onChange, ta
     const availability = value.find(v => v.time === time)
     return availability?.level as AvailabilityLevel || 'not_available'
   }, [value])
-
-  // Helper function to check if a time is available (preferred or can_if_needed)
-  const isTimeAvailable = useCallback((time: string): boolean => {
-    const level = getAvailabilityLevel(time)
-    return level === 'preferred' || level === 'can_if_needed'
-  }, [getAvailabilityLevel])
 
   // Helper function to cycle through availability levels
   const cycleAvailabilityLevel = useCallback((currentLevel: AvailabilityLevel): AvailabilityLevel => {

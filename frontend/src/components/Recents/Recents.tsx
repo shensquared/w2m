@@ -1,6 +1,5 @@
 'use client'
 
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Temporal } from '@js-temporal/polyfill'
 
@@ -8,7 +7,7 @@ import Content from '/src/components/Content/Content'
 import Section from '/src/components/Section/Section'
 import { useTranslation } from '/src/i18n/client'
 import { useStore } from '/src/stores'
-import useRecentsStore from '/src/stores/recentsStore'
+import useRecentsStore, { RecentEvent } from '/src/stores/recentsStore'
 import { relativeTimeFormat } from '/src/utils'
 
 import styles from './Recents.module.scss'
@@ -18,7 +17,7 @@ const Recents = () => {
   const { t, i18n } = useTranslation(['home', 'common'])
   const router = useRouter()
 
-  const handleEventClick = (event: any) => {
+  const handleEventClick = (event: RecentEvent) => {
     // Store username in sessionStorage for auto-fill
     if (event.username) {
       sessionStorage.setItem(`w2m-username-${event.id}`, event.username)

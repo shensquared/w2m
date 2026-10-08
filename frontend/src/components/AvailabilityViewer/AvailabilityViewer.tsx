@@ -1,6 +1,6 @@
 'use client'
 
-import { Fragment, useEffect, useMemo, useState } from 'react'
+import { Fragment, useMemo, useState } from 'react'
 import { flip, offset, shift, useFloating } from '@floating-ui/react-dom'
 
 import Content from '/src/components/Content/Content'
@@ -29,7 +29,7 @@ interface AvailabilityViewerProps {
 }
 
 const AvailabilityViewer = ({ times, people, table, tempFocus: propTempFocus, onCopyTimeslot }: AvailabilityViewerProps) => {
-  const { t, i18n } = useTranslation('event')
+  const { t } = useTranslation('event')
 
   const highlight = useStore(useSettingsStore, state => state.highlight)
   const tempFocus = propTempFocus

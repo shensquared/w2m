@@ -87,7 +87,6 @@ Start the API with `cargo run` in one terminal and the frontend with `yarn dev` 
 - **Use Yarn, not npm.** Both `frontend/yarn.lock` and `frontend/package-lock.json` exist, but CI installs with Yarn and `yarn.lock` is the one kept current.
 - **Ports are fixed in code.** The API port 3034 is set in `api/src/main.rs`. The frontend port 1234 is set in the `dev` and `start` scripts in `frontend/package.json`.
 - **Storage is chosen at compile time** with a Cargo feature, not at runtime. With no feature, data lives in memory and is lost on restart.
-- **`yarn lint --max-warnings 0` fails on the current tree** because of existing indentation warnings. To check only your changes, run `yarn next lint --file <path>` for each file you touched.
 - **Frontend style:** no semicolons, 2-space indentation, sorted imports (`simple-import-sort`), and imports written from the frontend root as `/src/...`. See `frontend/.eslintrc.json`.
 - **Translations:** add new strings only to `frontend/src/i18n/locales/en/`. Other languages fall back to English for missing keys.
 - **Server and client translation hooks:** async server components, such as the pages and `Footer`, import `useTranslation` from `/src/i18n/server`. Client components import it from `/src/i18n/client`.

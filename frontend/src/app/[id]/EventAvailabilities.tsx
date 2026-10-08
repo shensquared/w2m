@@ -11,12 +11,10 @@ import Content from '/src/components/Content/Content'
 import Legend from '/src/components/Legend/Legend'
 import Login from '/src/components/Login/Login'
 import Section from '/src/components/Section/Section'
-import SelectField from '/src/components/SelectField/SelectField'
 import { UsageItem, UsageSection } from '/src/components/UsageSection'
 import { EventResponse, getPeople, PersonResponse, updatePerson } from '/src/config/api'
 import { usePalette } from '/src/hooks/usePalette'
 import { useTranslation } from '/src/i18n/client'
-import timezones from '/src/res/timezones.json'
 import { useStore } from '/src/stores'
 import useRecentsStore from '/src/stores/recentsStore'
 import useSettingsStore from '/src/stores/settingsStore'
@@ -45,34 +43,6 @@ const EventAvailabilities = ({ event }: EventAvailabilitiesProps) => {
   const [vipParticipants, setVipParticipants] = useState<string[]>([])
   const [tempFocus, setTempFocus] = useState<string>()
   const [shareLink, setShareLink] = useState<string>()
-
-  // Calculate actual scores for VIP tab
-  const vipActualScores = useMemo(() => {
-    if (tab !== 'vip') return []
-    const { availabilities } = calculateAvailability(expandedTimes, people, vipParticipants)
-    const scores = new Set<number>()
-    scores.add(0)
-    availabilities.forEach(availability => {
-      if (availability.people.length > 0) {
-        const score = availability.preferred.length * 2 + availability.canIfNeeded.length * 1
-        scores.add(score)
-      }
-    })
-    return Array.from(scores).sort((a, b) => a - b)
-  }, [tab, expandedTimes, people, vipParticipants])
-
-  // Create palette for VIP tab (must be called at top level, not inside useMemo)
-  const vipPalette = usePalette(vipActualScores?.length || 1)
-
-  // Generate gradient stops for VIP tab color bar
-  const vipGradientStops = useMemo(() => {
-    if (tab !== 'vip' || !vipPalette || vipPalette.length === 0) return ''
-    return vipPalette.map((color, i) => {
-      const start = (i / vipPalette.length) * 100
-      const end = ((i + 1) / vipPalette.length) * 100
-      return `${color.string} ${start}%, ${color.string} ${end}%`
-    }).join(', ')
-  }, [tab, vipPalette])
 
   // Web worker for calculating the heatmap table
   const tableWorker = useRef<Worker>()
@@ -330,7 +300,7 @@ const VipAvailabilityViewer = ({ times, people, table, vipParticipants }: VipAva
   })
 
   // Calculate VIP-weighted availabilities
-  const { availabilities, min, max } = useMemo(() =>
+  const { availabilities } = useMemo(() =>
     calculateAvailability(times, people.filter(p => filteredPeople.includes(p.name)), vipParticipants),
   [times, filteredPeople, people, vipParticipants])
 

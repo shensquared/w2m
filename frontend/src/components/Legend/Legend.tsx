@@ -1,7 +1,6 @@
 import { useState } from 'react'
 
 import { useTranslation } from '/src/i18n/client'
-import { useStore } from '/src/stores'
 import useSettingsStore from '/src/stores/settingsStore'
 
 import styles from './Legend.module.scss'
@@ -17,9 +16,8 @@ interface LegendProps {
   highLabel?: string
 }
 
-const Legend = ({ min, max, total, palette, actualScores, onSegmentFocus, lowLabel = 'Low availability', highLabel = 'High availability' }: LegendProps) => {
+const Legend = ({ palette, actualScores, onSegmentFocus, lowLabel = 'Low availability', highLabel = 'High availability' }: LegendProps) => {
   const { t } = useTranslation('event')
-  const highlight = useStore(useSettingsStore, state => state.highlight)
   const setHighlight = useSettingsStore(state => state.setHighlight)
   const [clickedSegment, setClickedSegment] = useState<number | undefined>()
 

@@ -14,7 +14,7 @@ interface InstructionsProps {
   onCopyTimeslot?: (timeslotInfo: string) => void
 }
 
-const Instructions = ({ people, eventId, eventName, timezone, onTimezoneChange, onHoverPerson, onCopyTimeslot }: InstructionsProps) => {
+const Instructions = ({ people, onHoverPerson }: InstructionsProps) => {
   const [lockedPerson, setLockedPerson] = useState<string | undefined>()
 
   return (

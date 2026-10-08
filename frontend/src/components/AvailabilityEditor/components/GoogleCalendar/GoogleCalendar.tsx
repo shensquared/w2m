@@ -37,8 +37,8 @@ const login = (callback: (tokenResponse: google.accounts.oauth2.TokenResponse) =
 
 interface GoogleCalendarProps {
   timezone: string
-  timeStart: any
-  timeEnd: any
+  timeStart: Temporal.ZonedDateTime
+  timeEnd: Temporal.ZonedDateTime
   times: string[]
   onImport: (availability: Array<{ time: string; level: string }>) => void
 }

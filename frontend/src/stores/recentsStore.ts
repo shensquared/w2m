@@ -46,7 +46,7 @@ const useRecentsStore = create<RecentsStore>()(persist(
             name: ev.name,
             created_at: ev.created, // Field renamed
           })),
-        } as any
+        } as RecentsStore
       }
       if (version === 1) {
         // Migrate from old string[] availability to new structure
@@ -70,7 +70,7 @@ const useRecentsStore = create<RecentsStore>()(persist(
               }))
             } : undefined
           })),
-        } as any
+        } as RecentsStore
       }
       return persistedState as RecentsStore
     },
