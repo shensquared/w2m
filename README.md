@@ -20,11 +20,12 @@ Found a bug or have an idea? [Open an issue](https://github.com/shensquared/w2m/
 | `frontend/` | Next.js 13 app router site in TypeScript and SCSS modules. Pages in `frontend/src/app/`, components in `frontend/src/components/`. |
 | `frontend/src/i18n/locales/` | Translation JSON files, one folder per language. |
 | `browser-extension/` | Static extension. `popup.html` is an iframe of the site's `/create` page. No build step. |
-| `.github/workflows/` | CI checks (`check_api.yml`, `check_frontend.yml`) and deploy jobs inherited from Crab Fit. |
+| `mcp/` | MCP server in Python that lets Claude look up polls, rank the best times, and create polls through the API. Runs locally over stdio or as a hosted endpoint with GitHub sign-in. See [`mcp/README.md`](mcp/README.md). |
+| `.github/workflows/` | CI checks (`check_api.yml`, `check_frontend.yml`, `check_mcp.yml`) and deploy jobs inherited from Crab Fit. |
 
 ## Commands
 
-Requirements: [Rust](https://www.rust-lang.org/tools/install) (stable), [Node.js](https://nodejs.org/) 18 or later (CI uses 18), and [Yarn](https://classic.yarnpkg.com/) 1.
+Requirements: [Rust](https://www.rust-lang.org/tools/install) (stable), [Node.js](https://nodejs.org/) 18 or later (CI uses 18), and [Yarn](https://classic.yarnpkg.com/) 1. The MCP server also needs [uv](https://docs.astral.sh/uv/), which installs the Python version it pins.
 
 ### API (`api/`)
 
@@ -51,6 +52,17 @@ yarn lint                        # ESLint (CI adds --max-warnings 0)
 ```
 
 `frontend/package.json` has no test script. The type check and lint are the checks.
+
+### MCP server (`mcp/`)
+
+```bash
+cd mcp
+uv sync          # install into mcp/.venv
+uv run pytest    # tests (CI)
+uv run w2m-mcp   # run over stdio; Claude Code or Claude Desktop normally starts it
+```
+
+Setup for Claude Code, Claude Desktop, and the hosted endpoint is in [`mcp/README.md`](mcp/README.md).
 
 ### Run both locally
 
@@ -93,6 +105,7 @@ See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the issue and pull request process.
 - **Copy a time slot.** Hover over a slot in the group view to see who is free, and click it to copy the time.
 - **Usage instructions** on each tab.
 - **Remembered names.** Recently visited events remember the name you used, so opening one fills in the login form for you.
+- **MCP server.** `mcp/` lets Claude look up polls, see who responded, rank the times most people can make, and create polls.
 
 ## License
 

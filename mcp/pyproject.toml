@@ -1,0 +1,25 @@
+[project]
+name = "w2m-mcp"
+version = "0.1.0"
+description = "MCP server for w2m, a self-hosted Crab Fit scheduling poll site"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastmcp>=4.0.11",
+    "httpx>=0.28.1",
+    "httpx2>=2.5.0",
+    "mcp>=2.3,<3",
+]
+
+[project.scripts]
+w2m-mcp = "w2m_mcp.server:main"
+
+[build-system]
+requires = ["uv_build>=0.12.23,<0.13.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "anyio>=4.15.1",
+    "pytest>=9.1.1",
+]
