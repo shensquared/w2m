@@ -4,9 +4,9 @@ from datetime import date, datetime, timezone
 from typing import Annotated, Literal
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
-from mcp.server import MCPServer
-from mcp.server.mcpserver.exceptions import ToolError
-from mcp.types import ToolAnnotations
+from fastmcp import FastMCP
+from fastmcp.exceptions import ToolError
+from mcp_types import ToolAnnotations
 from pydantic import BaseModel, Field
 
 from w2m_mcp import api
@@ -22,7 +22,7 @@ from w2m_mcp.slots import (
     weekday_dates,
 )
 
-mcp = MCPServer(
+mcp = FastMCP(
     "w2m",
     instructions=(
         "Tools for w2m, a when2meet-style scheduling poll site. Events are identified by an "
@@ -274,5 +274,16 @@ async def create_poll(
     )
 
 
+TOOLS = [get_event, list_respondents, best_times, create_poll]
+
+
 def main() -> None:
-    mcp.run()
+    import os
+    import sys
+
+    if "--http" in sys.argv[1:] or os.environ.get("W2M_MCP_TRANSPORT", "stdio").lower() == "http":
+        from w2m_mcp.hosted import serve
+
+        serve(os.environ)
+    else:
+        mcp.run(show_banner=False)

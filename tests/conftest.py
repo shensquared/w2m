@@ -2,7 +2,7 @@ import json
 
 import httpx
 import pytest
-from mcp import Client
+from fastmcp import Client
 
 from w2m_mcp import api
 from w2m_mcp.server import mcp
@@ -44,5 +44,5 @@ def fake_api(monkeypatch):
 
 @pytest.fixture
 async def client():
-    async with Client(mcp, raise_exceptions=True) as c:
+    async with Client(mcp) as c:
         yield c

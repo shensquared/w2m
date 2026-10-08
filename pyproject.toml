@@ -5,7 +5,9 @@ description = "MCP server for w2m, a self-hosted Crab Fit scheduling poll site"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "fastmcp>=4.0.11",
     "httpx>=0.28.1",
+    "httpx2>=2.5.0",
     "mcp>=2.3,<3",
 ]
 
