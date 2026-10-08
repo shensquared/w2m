@@ -1,18 +1,14 @@
 import { Fragment, useCallback, useEffect, useRef, useState } from 'react'
 
-import Button from '/src/components/Button/Button'
 import Content from '/src/components/Content/Content'
+import { UsageItem, UsageSection } from '/src/components/UsageSection'
 import { usePalette } from '/src/hooks/usePalette'
 import { useTranslation } from '/src/i18n/client'
 import { calculateTable, makeClass, parseSpecificDate } from '/src/utils'
-import { UsageSection, UsageItem } from '/src/components/UsageSection'
 
-import styles from './AvailabilityEditor.module.scss'
 import GoogleCalendar from './components/GoogleCalendar/GoogleCalendar'
-import RecentEvents from './components/RecentEvents/RecentEvents'
 import viewerStyles from '../AvailabilityViewer/AvailabilityViewer.module.scss'
 import Skeleton from '../AvailabilityViewer/components/Skeleton/Skeleton'
-import Legend from '../Legend/Legend'
 
 interface AvailabilityEditorProps {
   eventId?: string
@@ -28,7 +24,7 @@ interface AvailabilityEditorProps {
 
 type AvailabilityLevel = 'preferred' | 'can_if_needed' | 'not_available'
 
-const AvailabilityEditor = ({ eventId, times, timezone, value = [], onChange, table }: AvailabilityEditorProps) => {
+const AvailabilityEditor = ({ times, timezone, value = [], onChange, table }: AvailabilityEditorProps) => {
   const { t } = useTranslation('event')
 
   // Ref and state required to rerender but also access static version in callbacks
@@ -51,23 +47,17 @@ const AvailabilityEditor = ({ eventId, times, timezone, value = [], onChange, ta
     return availability?.level as AvailabilityLevel || 'not_available'
   }, [value])
 
-  // Helper function to check if a time is available (preferred or can_if_needed)
-  const isTimeAvailable = useCallback((time: string): boolean => {
-    const level = getAvailabilityLevel(time)
-    return level === 'preferred' || level === 'can_if_needed'
-  }, [getAvailabilityLevel])
-
   // Helper function to cycle through availability levels
   const cycleAvailabilityLevel = useCallback((currentLevel: AvailabilityLevel): AvailabilityLevel => {
     switch (currentLevel) {
-      case 'preferred':
-        return 'can_if_needed'
-      case 'can_if_needed':
-        return 'not_available'
-      case 'not_available':
-        return 'preferred'
-      default:
-        return 'preferred'
+    case 'preferred':
+      return 'can_if_needed'
+    case 'can_if_needed':
+      return 'not_available'
+    case 'not_available':
+      return 'preferred'
+    default:
+      return 'preferred'
     }
   }, [])
 
@@ -110,13 +100,13 @@ const AvailabilityEditor = ({ eventId, times, timezone, value = [], onChange, ta
   const getTimeColor = useCallback((time: string) => {
     const level = getAvailabilityLevel(time)
     switch (level) {
-      case 'preferred':
-        return palette[2].string // Green for preferred
-      case 'can_if_needed':
-        return palette[1].string // Yellow for can if needed
-      case 'not_available':
-      default:
-        return palette[0].string // Gray for not available
+    case 'preferred':
+      return palette[2].string // Green for preferred
+    case 'can_if_needed':
+      return palette[1].string // Yellow for can if needed
+    case 'not_available':
+    default:
+      return palette[0].string // Gray for not available
     }
   }, [getAvailabilityLevel, palette])
 
@@ -124,13 +114,13 @@ const AvailabilityEditor = ({ eventId, times, timezone, value = [], onChange, ta
   const getTimeHoverColor = useCallback((time: string) => {
     const level = getAvailabilityLevel(time)
     switch (level) {
-      case 'preferred':
-        return palette[2].highlight
-      case 'can_if_needed':
-        return palette[1].highlight
-      case 'not_available':
-      default:
-        return palette[0].highlight
+    case 'preferred':
+      return palette[2].highlight
+    case 'can_if_needed':
+      return palette[1].highlight
+    case 'not_available':
+    default:
+      return palette[0].highlight
     }
   }, [getAvailabilityLevel, palette])
 
@@ -156,12 +146,12 @@ const AvailabilityEditor = ({ eventId, times, timezone, value = [], onChange, ta
   // Get emoji for availability level
   const getEmojiForLevel = useCallback((level: AvailabilityLevel): string => {
     switch (level) {
-      case 'preferred':
-        return '😍'
-      case 'can_if_needed':
-        return '🙂'
-      default:
-        return ''
+    case 'preferred':
+      return '😍'
+    case 'can_if_needed':
+      return '🙂'
+    default:
+      return ''
     }
   }, [])
 

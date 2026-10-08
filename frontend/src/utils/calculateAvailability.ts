@@ -42,28 +42,28 @@ export const calculateAvailability = (dates: string[], people: Person[], vipPart
       if (timeAvailability) {
         const isVip = vipParticipants.includes(person.name)
         switch (timeAvailability.level) {
-          case 'preferred':
+        case 'preferred':
+          preferred.push(person.name)
+          available.push(person.name)
+          // VIP participants get double weight
+          if (isVip) {
             preferred.push(person.name)
             available.push(person.name)
-            // VIP participants get double weight
-            if (isVip) {
-              preferred.push(person.name)
-              available.push(person.name)
-            }
-            break
-          case 'can_if_needed':
+          }
+          break
+        case 'can_if_needed':
+          canIfNeeded.push(person.name)
+          available.push(person.name)
+          // VIP participants get double weight
+          if (isVip) {
             canIfNeeded.push(person.name)
             available.push(person.name)
-            // VIP participants get double weight
-            if (isVip) {
-              canIfNeeded.push(person.name)
-              available.push(person.name)
-            }
-            break
-          case 'not_available':
-          default:
-            // Not available, don't add to any list
-            break
+          }
+          break
+        case 'not_available':
+        default:
+          // Not available, don't add to any list
+          break
         }
       }
     })

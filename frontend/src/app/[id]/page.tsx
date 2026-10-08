@@ -5,7 +5,6 @@ import { notFound } from "next/navigation"
 import Content from "/src/components/Content/Content"
 import { getEvent } from "/src/config/api"
 import { useTranslation } from "/src/i18n/server"
-import { makeClass } from "/src/utils"
 
 import EventAvailabilities from "./EventAvailabilities"
 import styles from "./page.module.scss"
@@ -28,8 +27,6 @@ export const generateMetadata = async ({
 const Page = async ({ params }: PageProps) => {
   const event = await getEvent(params.id).catch(() => undefined)
   if (!event) notFound()
-
-  const { t, i18n } = await useTranslation(["common", "event"])
 
   return (
     <>
