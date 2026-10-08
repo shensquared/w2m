@@ -4,7 +4,7 @@ import os
 from urllib.parse import quote, urlparse
 
 import httpx
-from mcp.server.mcpserver.exceptions import ToolError
+from fastmcp.exceptions import ToolError
 
 API_URL = os.environ.get("W2M_API_URL", "https://w2mapi.shenshen.mit.edu").rstrip("/")
 SITE_URL = os.environ.get("W2M_SITE_URL", "https://w2m.shenshen.mit.edu").rstrip("/")

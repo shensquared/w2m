@@ -51,7 +51,7 @@ def team_sync(fake_api):
 
 
 async def test_get_event_accepts_link(client, team_sync):
-    result = await client.call_tool("get_event", {"event": "https://w2m.shenshen.mit.edu/team-sync-123456"})
+    result = await client.call_tool("get_event", {"event": "https://w2m.shenshen.mit.edu/team-sync-123456"}, raise_on_error=False)
     assert not result.is_error
     assert result.structured_content == {
         "id": "team-sync-123456",
@@ -65,20 +65,20 @@ async def test_get_event_accepts_link(client, team_sync):
 
 
 async def test_get_event_not_found(client, fake_api):
-    result = await client.call_tool("get_event", {"event": "nope-000000"})
+    result = await client.call_tool("get_event", {"event": "nope-000000"}, raise_on_error=False)
     assert result.is_error
     assert "No w2m event with ID 'nope-000000'" in result.content[0].text
 
 
 async def test_rate_limit_is_reported(client, fake_api):
     fake_api.add("GET", "/event/busy-1", status=429)
-    result = await client.call_tool("get_event", {"event": "busy-1"})
+    result = await client.call_tool("get_event", {"event": "busy-1"}, raise_on_error=False)
     assert result.is_error
     assert "rate limiting" in result.content[0].text
 
 
 async def test_list_respondents(client, team_sync):
-    result = await client.call_tool("list_respondents", {"event": "team-sync-123456"})
+    result = await client.call_tool("list_respondents", {"event": "team-sync-123456"}, raise_on_error=False)
     data = result.structured_content
     assert data["count"] == 4
     alice, bob, carol, dave = data["respondents"]
@@ -91,7 +91,7 @@ async def test_list_respondents(client, team_sync):
 
 
 async def test_best_times_ranks_and_lists_missing(client, team_sync):
-    result = await client.call_tool("best_times", {"event": "team-sync-123456"})
+    result = await client.call_tool("best_times", {"event": "team-sync-123456"}, raise_on_error=False)
     data = result.structured_content
     assert data["respondent_count"] == 4
     assert data["options"] == [
@@ -120,7 +120,7 @@ async def test_best_times_ranks_and_lists_missing(client, team_sync):
 
 
 async def test_best_times_unmerged_with_limit(client, team_sync):
-    result = await client.call_tool("best_times", {"event": "team-sync-123456", "limit": 2, "merge_adjacent": False})
+    result = await client.call_tool("best_times", {"event": "team-sync-123456", "limit": 2, "merge_adjacent": False}, raise_on_error=False)
     assert [o["when"] for o in result.structured_content["options"]] == [
         "Mon 12 Oct 2026 09:00-09:30",
         "Mon 12 Oct 2026 09:30-10:00",
@@ -130,7 +130,7 @@ async def test_best_times_unmerged_with_limit(client, team_sync):
 async def test_best_times_without_respondents(client, fake_api):
     fake_api.add("GET", "/event/empty-1", body=EVENT | {"id": "empty-1"})
     fake_api.add("GET", "/event/empty-1/people", body=[])
-    result = await client.call_tool("best_times", {"event": "empty-1"})
+    result = await client.call_tool("best_times", {"event": "empty-1"}, raise_on_error=False)
     assert result.is_error
     assert "No one has responded" in result.content[0].text
 
@@ -185,7 +185,7 @@ async def test_create_poll_with_weekdays(client, fake_api, monkeypatch):
     ],
 )
 async def test_create_poll_rejects_bad_input(client, fake_api, args, message):
-    result = await client.call_tool("create_poll", args)
+    result = await client.call_tool("create_poll", args, raise_on_error=False)
     assert result.is_error
     assert message in result.content[0].text
     assert fake_api.requests == []
