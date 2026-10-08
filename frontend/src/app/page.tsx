@@ -1,5 +1,6 @@
 import Content from "/src/components/Content/Content"
 import CreateForm from "/src/components/CreateForm/CreateForm"
+import Footer from "/src/components/Footer/Footer"
 import Header from "/src/components/Header/Header"
 import Recents from "/src/components/Recents/Recents"
 
@@ -16,6 +17,8 @@ const Page = async () => {
       <Content>
         <CreateForm />
       </Content>
+
+      <Footer />
     </>
   )
 }

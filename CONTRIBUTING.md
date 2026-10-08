@@ -1,77 +1,39 @@
-# Contributing to Crab Fit
+# Contributing to W2M
 
-## Creating Issues
+## Issues
 
-If you find any bugs or have a feature request, please [create an issue](https://github.com/GRA0007/crab.fit/issues/new/choose).
+If you find a bug or have a feature request, [open an issue](https://github.com/shensquared/w2m/issues/new).
 
-## Translating
+## Local development
 
-If you speak a language other than English and you want to help translate Crab Fit, visit [Crab Fit on Transifex](https://explore.transifex.com/crab-fit/crab-fit/) and click "Join this project".
+See [Local development](README.md#local-development) in the README for the tools you need and how to run the API and the frontend.
 
-For more information on how to translate, visit the [translating wiki page](https://github.com/GRA0007/crab.fit/wiki/Translating).
+### Checks
 
-## Local Development
+Run these before opening a pull request. They match the checks in `.github/workflows`.
 
-This is a guide on getting Crab Fit working locally for development purposes. You should first follow this if you're thinking of making a [pull request](#pull-requests).
-
-Note: if you'd like to get Crab Fit running because you want to have your own instance, please instead follow the [self-hosting](https://github.com/GRA0007/crab.fit/wiki/Self%E2%80%90hosting) guide.
-
-### Software
-
-Crab Fit is written using Rust (for the API) and Next.js (for the frontend). Before you begin, you'll need to make sure you have the required software installed:
-
-| Software | Installation instructions |
+| Folder | Command |
 | --- | --- |
-| git | You'll need git to clone the repository. You likely already have it if you're on MacOS, otherwise see the [git site](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git). |
-| node | I recommend using `nvm` or `fnm` to manage multiple node versions, but you can also install directly from the [node.js website](https://nodejs.org/en/download). |
-| yarn | Node comes with `npm`, which you can use to run `npm install --global yarn` to install yarn. |
-| rust | You can install rust by following the directions on the [rust website](https://www.rust-lang.org/tools/install). |
+| `frontend` | `yarn tsc` |
+| `frontend` | `yarn lint` |
+| `api` | `cargo clippy` |
 
-### Setup
+### Translations
 
-1. Clone the repository.
-2. Run `cargo run` in the `api` folder to build and start the API.
-3. Run `yarn` in `frontend` folder to install dependencies, then `yarn dev` to start the dev server.
+Translation files live in `frontend/src/i18n/locales`. When you add a string, add it to the `en` folder. Other languages fall back to English for strings they do not have.
 
-By default, the API will start at http://localhost:3000, and the frontend will be available at http://localhost:1234.
+### Browser extension
 
-#### Code Documentation
+The browser extension is an iframe that points to `/create` on the frontend. To test it, set the iframe `src` in `browser-extension/popup.html` to `http://localhost:1234/create`, then load the extension in your browser.
 
-For code-specific documentation, please see the README files in the repo.
+Visiting the URL directly does not work, because `/create` redirects to the home page when it is not running inside an iframe.
 
-### Browser Extension
+## Pull requests
 
-The Crab Fit browser extension is currently an iFrame that points to `/create` on the frontend. To test, edit the `popup.html` file's iframe src to be `http://localhost:1234/create`, then view that in your browser.
+Open pull requests against `main` in [shensquared/w2m](https://github.com/shensquared/w2m). If your pull request fixes an issue, mention it at the top of the description:
 
-Note that you can't just visit the url directly, as it will redirect to the full create form if not running within an iFrame.
-
-## Pull Requests
-
-Before starting a pull request, first check if there's an issue open that your pull request will resolve. If there isn't, please create one to give the community a chance to comment, and also to prevent others from working on similar pull requests that will conflict with yours.
-
-Mention the issue you are closing at the top of your PR like so:
 ```
 Closes #123
 
 [describe your PR...]
 ```
-
-## Git Branch Conventions
-
-`main`
-Production branch. Do not commit directly to this branch.
-
-`feat/*`
-Prefix new feature branches with feat. When complete, submit a PR into main.
-
-`fix/*`
-When fixing a bug, prefix branches with fix. When complete, submit a PR into main.
-
-`refactor/*`
-For refactoring code. When complete, submit a PR into main.
-
-`chore/*`
-For chores like adding type checking, setting up CI, fixing typos etc. When finished, submit a PR into main.
-
-`docs/*`
-Used when updating documentation such as README files. When finished, submit a PR into main.

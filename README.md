@@ -4,109 +4,70 @@
   <img src="frontend/public/w2mlogo.png" alt="W2M Logo with animal head, geometric cube, and CREATE A W2M text" width="300">
 </div>
 
-**Find the perfect meeting time that works for everyone.** W2M makes scheduling group events effortless with an intuitive interface and powerful features.
+W2M is a group scheduling tool in the style of when2meet. Create an event, share the link, and everyone paints the times they are free. It runs at **https://w2m.shenshen.mit.edu**.
 
-## ✨ Features
+W2M is a fork of [Crab Fit](https://github.com/GRA0007/crab.fit) by [Ben Grant](https://github.com/GRA0007) and its contributors. Most of the app, including the Rust API, the Next.js frontend, the translations, and the browser extension, comes from Crab Fit.
 
-### 🎯 **Smart Grid Interface**
-- **30-minute time slots** for easier, more practical scheduling
-- **Drag & drop selection** to quickly mark your availability
-- **Visual feedback** with color-coded availability levels (Preferred, Can if needed, Not available)
-- **Responsive design** that works perfectly on desktop and mobile
-- **Interactive heatmap** showing group availability with real-time updates
+Found a bug or have an idea? [Open an issue](https://github.com/shensquared/w2m/issues/new).
 
-### 👥 **Three Powerful Views**
-- **Your Availability Tab** - Mark your own availability with drag-to-select and keyboard shortcuts
-- **Group Availability Tab** - See everyone's availability in a beautiful heatmap with individual highlighting
-- **VIP Tab** - Give important participants double weight in scheduling decisions
+## What differs from Crab Fit
 
-### 🎨 **Enhanced User Experience**
-- **Clear usage instructions** on every tab with consistent white background and purple borders
-- **No gaps or spacing issues** - perfectly aligned interface elements
-- **Keyboard shortcuts** for power users:
-  - `Cmd/Ctrl + A` - Select all time slots
-  - `Cmd/Ctrl + I` - Invert selections
-  - `Cmd/Ctrl + Shift + A` - Clear all selections
-- **Google Calendar integration** for seamless availability import
-- **One-click time slot copying** for easy sharing
+- **Three availability levels.** Each slot is *preferred*, *can if needed*, or *not available*. Click or drag to cycle a slot through the levels.
+- **30-minute slots** with taller grid cells, in place of 15-minute slots.
+- **VIP view.** A VIP tab lets you mark participants whose availability counts double, and shows the reweighted heatmap.
+- **Copy a time slot.** Hover over a slot in the group view to see who is free, and click it to copy the time.
+- **Usage instructions** on each tab.
+- **Remembered names.** Recently visited events remember the name you used, so opening one fills in the login form for you.
+- **W2M branding.** The landing page shows only the create form and your recent events. The Crab Fit about section, video, app download buttons, and donation links are gone.
+- **API defaults.** The API listens on port 3034, and in release builds it falls back to the W2M site as its allowed origin when `FRONTEND_URL` is unset.
 
-### 🎯 **Advanced Scheduling Features**
-- **VIP participant weighting** - Mark key attendees to give their preferences double influence
-- **Individual participant highlighting** - Hover over names to see their specific availability
-- **Real-time availability calculation** with visual scoring
-- **Timezone support** with automatic detection and manual selection
-- **Recent events tracking** for quick access to previous meetings
+## Local development
 
-### 📱 **Mobile Optimized**
-- **Touch-friendly controls** with larger interaction areas
-- **Responsive grid sizing** that adapts to any screen size
-- **Optimized for mobile browsers** with smooth interactions
-- **Gesture support** for drag and drop on touch devices
+You need [Rust](https://www.rust-lang.org/tools/install), [Node.js](https://nodejs.org/) 18 or later, and [Yarn](https://classic.yarnpkg.com/) 1.
 
-### 🔧 **Developer Friendly**
-- **Open source** - fully transparent and customizable
-- **Modern tech stack** - Next.js frontend with TypeScript, Rust backend with Axum
-- **Component-based architecture** with reusable UI components
-- **Docker ready** - easy deployment and scaling
-- **Comprehensive documentation** for contributors
+### API
 
-## 🚀 Quick Start
-
-### Prerequisites
-- Node.js 18+
-- Rust 1.70+
-- Git
-
-### Local Development
 ```bash
-# Clone the repository
-git clone https://github.com/your-username/w2m.git
-cd w2m
-
-# Start the backend (Rust API)
-cd api && cargo run
-
-# Start the frontend (Next.js) in a new terminal
-cd frontend && npm run dev
+cd api
+cargo run
 ```
 
-Visit `http://localhost:1234` to start scheduling!
+The API listens on http://localhost:3034 and serves interactive API docs at `/docs`. With no features enabled it keeps everything in memory, so data is lost on restart. To use a database, build with the SQL adaptor, which supports Postgres, MySQL, and SQLite:
 
-## 🏗️ Architecture
+```bash
+cargo run --features sql-adaptor
+```
 
-- **Frontend**: Next.js 14 with TypeScript, SCSS modules, and modern React patterns
-- **Backend**: Rust API with Axum framework and async/await support
-- **Storage**: Flexible adaptor system supporting in-memory and SQL databases
-- **UI Components**: Reusable, consistent components with proper TypeScript interfaces
-- **Deployment**: Docker and Fly.io ready with optimized builds
+The API reads its environment from the shell or from an `api/.env` file. That file is not committed, so create it yourself.
 
-## 🎨 UI/UX Highlights
+| Variable | Needed when | Purpose |
+| --- | --- | --- |
+| `DATABASE_URL` | Running with `--features sql-adaptor` | Connection URL for the database, such as `postgresql://user:password@localhost:5432/w2m`. |
+| `FRONTEND_URL` | Running a release build | Origin of the frontend that may call the API, used for CORS. Debug builds allow `http://localhost:1234` when it is unset. |
+| `CRON_KEY` | Optional | If set, `/tasks/cleanup` only runs when the request sends a matching `X-Cron-Key` header. |
 
-- **Consistent Design Language**: All tabs follow the same visual structure with unified spacing
-- **Accessibility First**: Keyboard navigation, screen reader support, and proper ARIA labels
-- **Performance Optimized**: Web workers for heavy calculations, efficient re-renders
-- **Internationalization Ready**: Built-in i18n support for multiple languages
-- **Theme Support**: CSS custom properties for easy theming and customization
+See [`api/README.md`](api/README.md) and [`api/adaptors/`](api/adaptors) for more on the API and its storage adaptors.
 
-## 🤝 Contributing
+### Frontend
 
-We welcome contributions! See our [Contributing Guide](./CONTRIBUTING.md) for:
-- Development environment setup
-- Code style guidelines
-- Pull request process
-- Issue reporting
+```bash
+cd frontend
+yarn install
+yarn dev
+```
 
-## 📄 License
+The frontend runs at http://localhost:1234 and talks to the API at http://localhost:3034. Put overrides in `frontend/.env`:
 
-This project is licensed under the [GNU GPLv3](./LICENSE).
+| Variable | Purpose |
+| --- | --- |
+| `NEXT_PUBLIC_API_URL` | Base URL of the API. Defaults to `http://localhost:3034`. |
+| `NEXT_PUBLIC_GOOGLE_CLIENT_ID`, `NEXT_PUBLIC_GOOGLE_API_KEY` | Optional. Turn on the Google Calendar import. |
 
-## 🙏 Acknowledgments
+Before opening a pull request, run `yarn tsc` and `yarn lint` in `frontend`, and `cargo clippy` in `api`. See [`CONTRIBUTING.md`](CONTRIBUTING.md) for more.
 
-Built on the foundation of [crab.fit](https://github.com/GRA0007/crab.fit) by [@GRA0007](https://github.com/GRA0007).
+## License
 
----
-
-**W2M** - because finding the perfect meeting time should be simple! 
+W2M is licensed under the [GNU General Public License v3.0](LICENSE), the same license as Crab Fit.
 
 ---
 
