@@ -3,10 +3,9 @@
     "tagline": "Create your own W2M event",
     "cta": "Create your own W2M",
     "created": "The event was created {{date}}",
-    "donate": {
-        "info": "",
-        "button": "",
-        "title": ""
+    "footer": {
+        "source": "Source code",
+        "bug": "Report a bug"
     },
     "options": {
         "name": "Options",
